@@ -4,7 +4,9 @@ import React, { useState } from 'react'
 const App =() => {
 
   const [address,setAddress] =useState('')
+
   const [checkLawnMowing,setCheckLawnMowing] = useState(false)
+
   const [name,setName] = useState('')
   const [phone,setPhone]= useState('')
   const [email,setEmail]= useState('')
@@ -42,7 +44,7 @@ const App =() => {
           <label>
         Gardening and landscaping
             <input
-              name="lawn_mowing"
+              name="gardening"
               type="checkbox"
             />
           </label>
@@ -50,7 +52,7 @@ const App =() => {
           <label>
         Gutter Clearing
             <input
-              name="cutter_clearing"
+              name="gutter_clearing"
               type="checkbox"
             />
           </label>
