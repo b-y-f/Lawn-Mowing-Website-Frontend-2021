@@ -1,26 +1,20 @@
-import React, { useState } from 'react'
-
+import React from 'react'
+import QuoteForm from './components/QuoteForm'
+import quoteService from './services/quote'
 
 const App =() => {
 
-  const [address,setAddress] =useState('')
-
-  const [checkLawnMowing,setCheckLawnMowing] = useState(false)
-
-  const [name,setName] = useState('')
-  const [phone,setPhone]= useState('')
-  const [email,setEmail]= useState('')
-  const [comment,setComment]= useState('')
-
-
-
-  const submitQuote = (event) => {
-    event.preventDefault()
-    console.log(address,checkLawnMowing,name)
+  const handleNewQuote = async(newQuote) => {
+    try {
+      quoteService.setToken('')
+      // TODO create a new user when each time guest quote
+      // const guest = await clientService.create(newGuest)
+      const quote = await quoteService.create(newQuote)
+      console.log(quote)
+    } catch (error) {
+      console.log(error.message)
+    }
   }
-
-
-
 
   return (
     <div>
@@ -28,83 +22,7 @@ const App =() => {
         You are guest/ welcome xxx
       </div>
       <h2>Quote</h2>
-      <form onSubmit={submitQuote}>
-
-        <div>
-          <label>
-          lawn mowing
-            <input
-              name="lawn_mowing"
-              type="checkbox"
-              checked={checkLawnMowing}
-              onChange={() => setCheckLawnMowing(!checkLawnMowing)}
-            />
-          </label>
-
-          <label>
-        Gardening and landscaping
-            <input
-              name="gardening"
-              type="checkbox"
-            />
-          </label>
-
-          <label>
-        Gutter Clearing
-            <input
-              name="gutter_clearing"
-              type="checkbox"
-            />
-          </label>
-
-          <label>
-        Rubbish Removal
-            <input
-              name="rubbish_removal"
-              type="checkbox"
-            />
-          </label>
-        </div>
-
-        <div>Service at
-          <input
-            value={address}
-            onChange={({ target }) => setAddress(target.value)}
-          />
-        </div>
-
-
-        <div>
-          name
-          <input
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
-        </div>
-
-        <div>
-          phone
-          <input
-            value={phone}
-            onChange={({ target }) => setPhone(target.value)}
-          />
-        </div>
-        <div>
-          email
-          <input
-            value={email}
-            onChange={({ target }) => setEmail(target.value)}
-          />
-        </div>
-        <div>
-          comment
-          <input
-            value={comment}
-            onChange={({ target }) => setComment(target.value)}
-          />
-        </div>
-        <button type="submit">Submit</button>
-      </form>
+      <QuoteForm handleNewQuote={handleNewQuote}/>
     </div>
   )
 }
