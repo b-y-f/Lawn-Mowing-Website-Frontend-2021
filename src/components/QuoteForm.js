@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import guestService from '../services/guest'
+
 
 const QuoteForm = ({ handleNewQuote }) => {
 
@@ -11,29 +13,35 @@ const QuoteForm = ({ handleNewQuote }) => {
   const [email,setEmail]= useState('')
   const [comment,setComment]= useState('')
 
-  const submitQuote = (event) => {
+  const submitQuote = async(event) => {
     event.preventDefault()
 
-    // TODO default unit 1 user could change like squres 100, rubish 2(bag)
+    const resGuest = await guestService.create({
+      address,
+      name,
+      phone,
+      email,
+    }).then(res => res.data)
+
+    // TODO default unit 0 user could change like squres 100, rubish 2(bag)
     const serviceSelected = [
       islLawnMowing && 'Lawn mowing',
       isGardening && 'Gardening',
       isRubbishRemove && 'Rubbish Removal',
     ]
       .filter(Boolean)
-      .map(i => ({ item:i,unit:1 }))
+      .map(i => ({ item:i  }))
 
     handleNewQuote({
-      address,
-      name,
-      phone,
-      email,
-      comment,
       serviceItem:serviceSelected,
-      clientId: '6115431aa4014d0b84f6d288'
+      comment,
+      guestId:resGuest.id
     })
-    // TODO set all empty after submit
     setName('')
+    setAddress('')
+    setPhone('')
+    setEmail('')
+    setComment('')
   }
   return(
     <>
@@ -87,30 +95,26 @@ const QuoteForm = ({ handleNewQuote }) => {
         </div>
 
 
-        <div>
-  name
+        <div>name
           <input
             value={name}
             onChange={({ target }) => setName(target.value)}
           />
         </div>
 
-        <div>
-  phone
+        <div>phone
           <input
             value={phone}
             onChange={({ target }) => setPhone(target.value)}
           />
         </div>
-        <div>
-  email
+        <div>email
           <input
             value={email}
             onChange={({ target }) => setEmail(target.value)}
           />
         </div>
-        <div>
-  comment
+        <div>comment
           <input
             value={comment}
             onChange={({ target }) => setComment(target.value)}
