@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React, useEffect, useState } from 'react'
 import QuoteForm from './components/QuoteForm'
 import Login from './components/Login'
 import Notification from './components/Notification'
@@ -12,11 +12,24 @@ import loginService from './services/login'
 const App =() => {
 
   const [user,setUser] = useState(null)
-  console.log(user)
 
   const [page,setPage] = useState('guest-quote')
 
   const [message, setMessage] = useState('')
+
+  const [userQuotes,setUserQuotes] = useState([])
+
+
+  useEffect(() => {
+    quoteService.getAll().then(quotes => {
+      console.log('fetching data...')
+      if (user){
+        console.log(quotes.filter(q => q.user === user.username))
+        setUserQuotes([])
+      }
+    }
+    )
+  }, [user])
 
   const handleNewQuote = async( quoteObj ) => {
     try {
@@ -65,9 +78,12 @@ const App =() => {
   }else if (page === 'clientDash'){
     return(
       <>
-        <Notification message={`Hi, ${user.name} you are log in`} />
+        <Notification message={`Hi, ${user.name} you are log in`} /><button>log out</button>
         <h2>This is client client Dash</h2>
         <p>will show their past bookings</p>
+        <div>
+          {userQuotes}
+        </div>
       </>
     )
   }
