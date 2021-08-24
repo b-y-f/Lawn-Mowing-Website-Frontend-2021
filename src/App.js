@@ -51,7 +51,7 @@ const App =() => {
         alert(`hi ${res.data.name} you are signed up, login pls`)
         setPage('login')
       })
-      .catch(() => console.log('Fail'))
+      .catch(() => alert('Fail, user duplicated'))
   }
 
   const handleUserLogin = async(loginObj) => {
@@ -78,12 +78,14 @@ const App =() => {
   }else if (page === 'clientDash'){
     return(
       <>
-        <Notification message={`Hi, ${user.name} you are log in`} /><button>log out</button>
-        <h2>This is client client Dash</h2>
-        <p>will show their past bookings</p>
+        <Notification message={`Hi, ${user.name} you are log in`} /><button onClick={() => alert('under dev...')}>log out</button>
+        <h2>This is client Dash</h2>
+        <p>will show their past bookings, can be checked in console,currently no quote</p>
         <div>
           {userQuotes}
         </div>
+
+        <h2>Making new quote</h2>
       </>
     )
   }
