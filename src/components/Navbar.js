@@ -1,23 +1,32 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { AppBar, Toolbar, Button } from '@material-ui/core'
 
 export default function Navbar(){
   return(
-    <>
-      <ul>
-        <li>
-          <Link to="/quotes">quote history</Link>
-        </li>
-        <li>
-          <Link to="/login">logout/in</Link>
-        </li>
-        <li>
-          <Link to="/">new quote</Link>
-        </li>
-        <li>
-          <Link to="/signup">signup</Link>
-        </li>
-      </ul>
-    </>
+    <AppBar position="static">
+      <Toolbar>
+        <Button color="inherit" component={Link} to="/quotes">
+          quote history
+        </Button>
+
+        <Button color="inherit" component={Link} to="/login">
+        logout/in
+        </Button>
+
+        <Button color="inherit" component={Link} to="/">
+        new quote
+        </Button>
+
+        <Button color="inherit" component={Link} to="/signup">
+        signup
+        </Button>
+
+        {/* <Typography variant="h6" className={classes.title}>
+        News
+        </Typography> */}
+      </Toolbar>
+
+    </AppBar>
   )
 }
