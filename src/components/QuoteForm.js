@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import guestService from '../services/guest'
+import guestService from '../services/quoteGuest'
 
 
-const QuoteForm = ({ handleNewQuote }) => {
-
+const QuoteForm = ({ handleQuote , user }) => {
   const [islLawnMowing,setIslLawnMowing] = useState(false)
   const [isGardening,setIsGardening] = useState(false)
   const [isRubbishRemove,setIsRubbishRemove] = useState(false)
@@ -16,12 +15,14 @@ const QuoteForm = ({ handleNewQuote }) => {
   const submitQuote = async(event) => {
     event.preventDefault()
 
-    const resGuest = await guestService.create({
+    const guestInfo = {
       address,
       name,
       phone,
       email,
-    }).then(res => res.data)
+    }
+
+    const resGuest = await guestService.create(guestInfo).then(res => res.data)
 
     // TODO default unit 0 user could change like squres 100, rubish 2(bag)
     const serviceSelected = [
@@ -32,7 +33,7 @@ const QuoteForm = ({ handleNewQuote }) => {
       .filter(Boolean)
       .map(i => ({ item:i  }))
 
-    handleNewQuote({
+    handleQuote({
       serviceItem:serviceSelected,
       comment,
       guestId:resGuest.id
@@ -43,6 +44,8 @@ const QuoteForm = ({ handleNewQuote }) => {
     setEmail('')
     setComment('')
   }
+
+
   return(
     <>
       <form onSubmit={submitQuote}>
@@ -94,36 +97,46 @@ const QuoteForm = ({ handleNewQuote }) => {
           />
         </div>
 
+        {user
+          ?null:
+          <>
+            <div>name
+              <input
+                value={name}
+                onChange={({ target }) => setName(target.value)}
+              />
+            </div>
 
-        <div>name
-          <input
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
-        </div>
+            <div>phone
+              <input
+                value={phone}
+                onChange={({ target }) => setPhone(target.value)}
+              />
+            </div>
+            <div>email
+              <input
+                value={email}
+                onChange={({ target }) => setEmail(target.value)}
+              />
+            </div>
+            <div>comment
+              <input
+                value={comment}
+                onChange={({ target }) => setComment(target.value)}
+              />
+            </div>
+          </>  }
 
-        <div>phone
-          <input
-            value={phone}
-            onChange={({ target }) => setPhone(target.value)}
-          />
-        </div>
-        <div>email
-          <input
-            value={email}
-            onChange={({ target }) => setEmail(target.value)}
-          />
-        </div>
-        <div>comment
-          <input
-            value={comment}
-            onChange={({ target }) => setComment(target.value)}
-          />
-        </div>
         <button type="submit">Submit</button>
       </form>
     </>
   )
+
+
+
+
+
+
 }
 
 

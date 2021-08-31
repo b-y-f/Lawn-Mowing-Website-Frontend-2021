@@ -2,29 +2,33 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { AppBar, Toolbar, Button } from '@material-ui/core'
 
-export default function Navbar(){
+export default function Navbar({ user }){
   return(
     <AppBar position="static">
       <Toolbar>
-        <Button color="inherit" component={Link} to="/quotes">
+
+        {user
+          ?(
+            <>
+              <Button color="inherit" component={Link} to="/">
+                new quote
+              </Button>
+              <Button color="inherit" component={Link} to="/quotes">
           quote history
-        </Button>
-
+              </Button>
+            </>
+          )
+          :null
+        }
         <Button color="inherit" component={Link} to="/login">
-        logout/in
+          {user? 'logout':'login'}
         </Button>
 
-        <Button color="inherit" component={Link} to="/">
-        new quote
-        </Button>
-
-        <Button color="inherit" component={Link} to="/signup">
+        {!user &&<Button color="inherit" component={Link} to="/signup">
         signup
-        </Button>
+        </Button>}
 
-        {/* <Typography variant="h6" className={classes.title}>
-        News
-        </Typography> */}
+
       </Toolbar>
 
     </AppBar>

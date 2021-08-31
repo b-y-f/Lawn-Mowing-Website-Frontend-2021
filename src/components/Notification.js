@@ -1,9 +1,9 @@
 import { React } from 'react'
 
-const Notification =({ message }) => {
+const Notification =() => {
   return(
     <>
-      {message}
+      handle in futrue with redux!
     </>
   )
 }
