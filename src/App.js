@@ -4,10 +4,10 @@ import Login from './components/Login'
 import Notification from './components/Notification'
 import SignupForm from './components/SignupForm'
 
-import clientQuoteService from './services/quoteClient'
-import guestQuoteService from './services/quoteGuest'
+import quoteService from './services/quote'
 import clientService from './services/client'
 import loginService from './services/login'
+import guestService from './services/guest'
 
 import {
   BrowserRouter as Router,
@@ -19,39 +19,32 @@ import Navbar from './components/Navbar'
 import { Container } from '@material-ui/core'
 
 
-const App =() => {
+const App = () => {
 
-  const [user,setUser] = useState(null)
-  const [userQuotes,setUserQuotes] = useState([])
+  const [user, setUser] = useState(null)
+  const [userQuotes, setUserQuotes] = useState([])
 
 
   useEffect(() => {
-    clientQuoteService.getAll().then(quotes => {
-      console.log('fetching data...')
-      if (user){
-        console.log(quotes.filter(q => q.user === user.username))
-        setUserQuotes([])
-      }
-    }
-    )
+    quoteService.getAll().then((res) => {
+      setUserQuotes(res)
+    }).catch(err => alert('wrong when getch user quotes..', err))
   }, [user])
 
-  const handleQuote = async( quote ) => {
-    try {
-      if(quote.isGuest){
-        await guestQuoteService.create(quote)
-          .then(res => res.data)
-      }else{
-        await clientQuoteService.create(quote)
-          .then(res => res.data)
-      }
-    } catch (error) {
-      console.log(error.message)
+  const handleQuote = async (quote, guestInfo) => {
+    if (!user) {
+      const guest = await guestService.create(guestInfo)
+      quoteService.setToken(guest.token)
     }
+
+    quoteService.setToken(user.token)
+
+    await quoteService.create(quote)
+      .then(res => console.log(res.data))
+      .catch(() => console.log('create new quote fail'))
   }
 
-
-  const handleCreateUser = async(userObj) => {
+  const handleCreateUser = async (userObj) => {
     await clientService.create(userObj)
       .then(res => {
         alert(`hi ${res.data.name} you are signed up, login pls`)
@@ -59,7 +52,12 @@ const App =() => {
       .catch(() => alert('Fail, user duplicated'))
   }
 
-  const handleUserLogin = async(loginObj) => {
+  const handleLogout = () => {
+    window.localStorage.clear()
+    setUser(null)
+  }
+
+  const handleLogin = async (loginObj) => {
     await loginService.login(loginObj)
       .then(res => {
         setUser(res)
@@ -74,29 +72,45 @@ const App =() => {
     <Router>
 
       <Notification />
-      <Navbar user={user} />
+      <Navbar user={user} handleLogout={handleLogout} />
 
       <Container maxWidth="sm">
         <Switch>
           <Route path="/signup">
-            <SignupForm handleCreateUser={handleCreateUser}/>
+            <SignupForm handleCreateUser={handleCreateUser} />
           </Route>
 
           <Route path="/login">
-            {user?<Redirect to="/quotes" />:<Login handleUserLogin={handleUserLogin}/>}
+            {user ? <Redirect to="/quotes" /> : <Login handleUserLogin={handleLogin} />}
           </Route>
 
           <Route path="/quotes">
-            <div>
-              <h2>New Quote</h2>
-              <QuoteFrom handleQuote={handleQuote} user={user}/>
-              <h2>Quote history</h2>
-              {userQuotes}
-            </div>
+            {
+              user ?
+                <div>
+                  <h2>New Quote</h2>
+                  <QuoteFrom handleQuote={handleQuote} />
+                  <h2>Quote history</h2>
+                  {userQuotes.map(q => (
+                    <div key={q.id}>
+                      <h4>Date : {q.date}</h4>
+                      <h4>Service items</h4>
+                      <ul>
+                        {q.serviceItem.map(i => (
+                          <li key={i._id}>{i.item}</li>
+                        ))}
+                      </ul>
+                      <div>{q.comment}</div>
+                    </div>
+                  ))}
+                </div>
+                : <Redirect to="/login" />
+            }
+
           </Route>
 
           <Route path="/">
-            {user? <Redirect to="/quotes" />: <QuoteFrom handleQuote={handleQuote} user={user}/> }
+            {user ? <Redirect to="/quotes" /> : <QuoteFrom handleQuote={handleQuote} user={user} />}
           </Route>
 
         </Switch>
