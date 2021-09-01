@@ -1,14 +1,11 @@
 import React, { useState } from 'react'
 
-
 const QuoteForm = ({ handleQuote }) => {
   const [islLawnMowing, setIslLawnMowing] = useState(false)
   const [isGardening, setIsGardening] = useState(false)
   const [isRubbishRemove, setIsRubbishRemove] = useState(false)
   const [comment, setComment] = useState('')
   const [address, setAddress] = useState('')
-
-
 
   const submitQuote = async (event) => {
     event.preventDefault()
@@ -19,30 +16,26 @@ const QuoteForm = ({ handleQuote }) => {
       isRubbishRemove && 'Rubbish Removal',
     ]
       .filter(Boolean)
-      .map(i => ({ item: i }))
+      .map((i) => ({ item: i }))
 
     handleQuote({
       serviceItem: serviceSelected,
-      comment, address
+      comment,
+      address,
     })
 
-    // setName('')
-    // setAddress('')
-    // setPhone('')
-    // setEmail('')
     setComment('')
   }
-
 
   return (
     <>
       <form onSubmit={submitQuote}>
-
         <div>
           <p>choice service</p>
           <ul>
             <li>
-              <label>lawn mowing
+              <label>
+                lawn mowing
                 <input
                   name="lawn_mowing"
                   type="checkbox"
@@ -53,7 +46,8 @@ const QuoteForm = ({ handleQuote }) => {
             </li>
 
             <li>
-              <label>Gardening and landscaping
+              <label>
+                Gardening and landscaping
                 <input
                   name="gardening"
                   type="checkbox"
@@ -64,7 +58,8 @@ const QuoteForm = ({ handleQuote }) => {
             </li>
 
             <li>
-              <label>Rubbish Removal
+              <label>
+                Rubbish Removal
                 <input
                   name="rubbish_removal"
                   type="checkbox"
@@ -74,40 +69,28 @@ const QuoteForm = ({ handleQuote }) => {
               </label>
             </li>
           </ul>
-
-
         </div>
 
-        <div>Service at
+        <div>
+          Service at
           <input
             value={address}
             onChange={({ target }) => setAddress(target.value)}
           />
         </div>
 
-
-
-
-        <div>comment
+        <div>
+          comment
           <input
             value={comment}
             onChange={({ target }) => setComment(target.value)}
           />
         </div>
 
-
         <button type="submit">Submit</button>
       </form>
     </>
   )
-
-
-
-
-
-
 }
-
-
 
 export default QuoteForm

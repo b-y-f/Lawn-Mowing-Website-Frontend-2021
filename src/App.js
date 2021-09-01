@@ -17,9 +17,13 @@ import {
 } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import { Container } from '@material-ui/core'
+import { useDispatch } from 'react-redux'
+import { showMesssage } from './reducers/noticeReducer'
 
 
 const App = () => {
+
+  const dispatch = useDispatch()
 
   const [user, setUser] = useState(null)
   const [userQuotes, setUserQuotes] = useState([])
@@ -55,6 +59,7 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.clear()
     setUser(null)
+    dispatch(showMesssage('Great!You logged out!',5))
   }
 
   const handleLogin = async (loginObj) => {
@@ -64,6 +69,7 @@ const App = () => {
         window.localStorage.setItem(
           'loggedUser', JSON.stringify(user)
         )
+        dispatch(showMesssage('Great!You logged in!',5))
       })
       .catch(() => alert('pass or username incorrect!!!'))
   }

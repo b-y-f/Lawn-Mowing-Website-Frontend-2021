@@ -17,7 +17,7 @@ module.exports = {
     'sourceType': 'module'
   },
   'plugins': [
-    'react', 'jest','react-hooks'
+    'react', 'jest', 'react-hooks'
   ],
   'rules': {
     'indent': [
