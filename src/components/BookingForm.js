@@ -33,6 +33,9 @@ const QuoteForm = () => {
 
     setComment('')
     setAddress('')
+    setIslLawnMowing(false)
+    setIsGardening(false)
+    setIsRubbishRemove(false)
   }
 
   return (

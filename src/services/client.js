@@ -3,7 +3,12 @@ const baseUrl = '/api/clients'
 
 const getAll = async() => {
   const request = await axios.get(baseUrl)
-  return request.then(response => response.data)
+  return request.data
+}
+
+const getBookingsById = async clientId => {
+  const requst = await axios.get(baseUrl + `/${clientId}`)
+  return requst.data.bookings
 }
 
 const create = async newObject => {
@@ -21,4 +26,4 @@ const remove = (id) => {
   return request.then(response => response.data)
 }
 
-export default { getAll,create,update,remove }
+export default { getAll,create,update,remove,getBookingsById }

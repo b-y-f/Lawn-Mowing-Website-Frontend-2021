@@ -8,8 +8,6 @@ const userReducer = (state = null, action) => {
     return action.user
   case 'LOGOUT':
     return null
-  case 'SET_USER':
-    return action.user
   default:
     return state
   }
@@ -38,7 +36,7 @@ export function setUser(loggedUserJSON){
   const user = JSON.parse(loggedUserJSON)
   quoteService.setToken(user.token)
   return {
-    type: 'SET_USER',
+    type: 'LOGIN',
     user
   }
 }

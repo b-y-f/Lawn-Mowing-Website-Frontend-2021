@@ -1,15 +1,32 @@
 import { React, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { initBookingById } from '../reducers/bookingReducer'
+import { login } from '../reducers/loginReducer'
+import { showMesssage } from '../reducers/noticeReducer'
 
-const Login = ({ handleUserLogin }) => {
+const Login = ({ user }) => {
+
+  const dispatch = useDispatch()
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  const handleLogin = ({ ...credentials }) => {
+    try {
+      dispatch(login(credentials))
+      dispatch(showMesssage('Great!You logged in!',5))
+      dispatch(initBookingById(user.id))
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
   return(
     <>
       <h2>Login</h2>
       <form onSubmit={(evt) => {
         evt.preventDefault()
-        handleUserLogin({ username,password })
+        handleLogin({ username,password })
       }}>
         <div>
           username: <input

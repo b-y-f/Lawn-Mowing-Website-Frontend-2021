@@ -3,7 +3,7 @@ import React from 'react'
 export default function QuoteList({ bookings }){
   return(
     <div>
-      <h2>Quote history</h2>
+      <h2>Booking history</h2>
       {bookings.map(q => (
         <div key={q.id}>
           <h4>Date : {q.date}</h4>
@@ -13,7 +13,7 @@ export default function QuoteList({ bookings }){
               <li key={i._id}>{i.item}</li>
             ))}
           </ul>
-          <div>{q.comment}</div>
+          <div>comments: {q.comment}</div>
         </div>
       ))}
     </div>

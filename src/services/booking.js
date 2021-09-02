@@ -7,8 +7,8 @@ const setToken = newToken => {
 }
 
 const getAll = async() => {
-  const request = await axios.get(baseUrl).then(res => res.data)
-  return request
+  const request = await axios.get(baseUrl)
+  return request.data
 }
 
 const create = async newObject => {
