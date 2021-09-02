@@ -1,5 +1,5 @@
 import loginService from '../services/login'
-import quoteService from '../services/quote'
+import quoteService from '../services/booking'
 
 
 const userReducer = (state = null, action) => {

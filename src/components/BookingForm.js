@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createBooking } from '../reducers/bookingReducer'
 
-const QuoteForm = ({ handleQuote }) => {
+const QuoteForm = () => {
+
+  const dispatch = useDispatch()
+
   const [islLawnMowing, setIslLawnMowing] = useState(false)
   const [isGardening, setIsGardening] = useState(false)
   const [isRubbishRemove, setIsRubbishRemove] = useState(false)
@@ -18,17 +23,21 @@ const QuoteForm = ({ handleQuote }) => {
       .filter(Boolean)
       .map((i) => ({ item: i }))
 
-    handleQuote({
+    const booking ={
       serviceItem: serviceSelected,
       comment,
       address,
-    })
+    }
+
+    dispatch( createBooking(booking) )
 
     setComment('')
+    setAddress('')
   }
 
   return (
     <>
+      <h2>New Quote</h2>
       <form onSubmit={submitQuote}>
         <div>
           <p>choice service</p>

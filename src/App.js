@@ -1,10 +1,8 @@
-import { React, useEffect, useState } from 'react'
-import QuoteFrom from './components/QuoteForm'
+import { React, useEffect } from 'react'
+import QuoteFrom from './components/BookingForm'
 import Login from './components/Login'
 import Notification from './components/Notification'
 import SignupForm from './components/SignupForm'
-
-import quoteService from './services/quote'
 import clientService from './services/client'
 
 import {
@@ -18,36 +16,26 @@ import { Container } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { showMesssage } from './reducers/noticeReducer'
 import { logout,login, setUser } from './reducers/loginReducer'
+import QuoteList from './components/QuoteList'
+import { initBooking } from './reducers/bookingReducer'
+import { sortBookingsByDate } from './helpers/sortHelper'
 
 
 const App = () => {
 
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
-
-  const [userQuotes, setUserQuotes] = useState([])
-
+  const bookings = useSelector(state => state.bookings)
+  const sortedBookings = sortBookingsByDate(bookings)
 
   useEffect(() => {
-    quoteService.getAll().then((res) => {
-      setUserQuotes(res)
-    }).catch(err => alert('wrong when getch user quotes..', err))
-
+    dispatch(initBooking())
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON){
       dispatch(setUser(loggedUserJSON))
     }
 
   }, [dispatch])
-
-  const handleQuote = async (quote) => {
-
-    if (user){
-      await quoteService.create(quote)
-        .then(res => console.log(res.data))
-        .catch(() => console.log('create new quote fail'))
-    }
-  }
 
   const handleCreateUser = async (userObj) => {
 
@@ -95,32 +83,18 @@ const App = () => {
           </Route>
 
           <Route path="/quotes">
-            {
-              user ?
-                <div>
-                  <h2>New Quote</h2>
-                  <QuoteFrom handleQuote={handleQuote} />
-                  <h2>Quote history</h2>
-                  {userQuotes.map(q => (
-                    <div key={q.id}>
-                      <h4>Date : {q.date}</h4>
-                      <h4>Service items</h4>
-                      <ul>
-                        {q.serviceItem.map(i => (
-                          <li key={i._id}>{i.item}</li>
-                        ))}
-                      </ul>
-                      <div>{q.comment}</div>
-                    </div>
-                  ))}
-                </div>
-                : <Redirect to="/login" />
-            }
+
+            {user ?
+              <>
+                <QuoteFrom />
+                <QuoteList bookings={sortedBookings} />
+              </>
+              : <Redirect to="/login" />}
 
           </Route>
 
           <Route path="/">
-            {user ? <Redirect to="/quotes" /> : <QuoteFrom handleQuote={handleQuote} user={user} />}
+            {user ? <Redirect to="/quotes" /> : <QuoteFrom/>}
           </Route>
 
         </Switch>
