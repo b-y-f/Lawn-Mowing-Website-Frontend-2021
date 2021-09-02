@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = '/api/quotes'
+const baseUrl = '/api/bookings'
 
 let token = null
 const setToken = newToken => {

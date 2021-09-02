@@ -1,5 +1,5 @@
-const noticeReducer = (state = null, action) => {
-  switch (action.type) {
+const noticeReducer = ( state = null, action ) => {
+  switch ( action.type ) {
   case 'SET_MESSAGE':
     return action.message
   default:
@@ -8,7 +8,7 @@ const noticeReducer = (state = null, action) => {
 }
 
 let timer
-export const showMesssage = (message, duration) => {
+export const showMesssage = ( message, duration ) => {
   return dispatch => {
     dispatch( {
       type: 'SET_MESSAGE',

@@ -6,8 +6,6 @@ import SignupForm from './components/SignupForm'
 
 import quoteService from './services/quote'
 import clientService from './services/client'
-import loginService from './services/login'
-import guestService from './services/guest'
 
 import {
   BrowserRouter as Router,
@@ -17,15 +15,16 @@ import {
 } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import { Container } from '@material-ui/core'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { showMesssage } from './reducers/noticeReducer'
+import { logout,login, setUser } from './reducers/loginReducer'
 
 
 const App = () => {
 
   const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
 
-  const [user, setUser] = useState(null)
   const [userQuotes, setUserQuotes] = useState([])
 
 
@@ -33,45 +32,50 @@ const App = () => {
     quoteService.getAll().then((res) => {
       setUserQuotes(res)
     }).catch(err => alert('wrong when getch user quotes..', err))
-  }, [user])
 
-  const handleQuote = async (quote, guestInfo) => {
-    if (!user) {
-      const guest = await guestService.create(guestInfo)
-      quoteService.setToken(guest.token)
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    if (loggedUserJSON){
+      dispatch(setUser(loggedUserJSON))
     }
 
-    quoteService.setToken(user.token)
+  }, [dispatch])
 
-    await quoteService.create(quote)
-      .then(res => console.log(res.data))
-      .catch(() => console.log('create new quote fail'))
+  const handleQuote = async (quote) => {
+
+    if (user){
+      await quoteService.create(quote)
+        .then(res => console.log(res.data))
+        .catch(() => console.log('create new quote fail'))
+    }
   }
 
   const handleCreateUser = async (userObj) => {
-    await clientService.create(userObj)
-      .then(res => {
-        alert(`hi ${res.data.name} you are signed up, login pls`)
-      })
-      .catch(() => alert('Fail, user duplicated'))
+
+    try {
+      const res =  await clientService.create(userObj)
+      dispatch(showMesssage(`hi ${res.data.name} you are signed up, login pls`,5))
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const handleLogout = () => {
     window.localStorage.clear()
-    setUser(null)
+    dispatch(logout())
     dispatch(showMesssage('Great!You logged out!',5))
   }
 
-  const handleLogin = async (loginObj) => {
-    await loginService.login(loginObj)
-      .then(res => {
-        setUser(res)
-        window.localStorage.setItem(
-          'loggedUser', JSON.stringify(user)
-        )
-        dispatch(showMesssage('Great!You logged in!',5))
-      })
-      .catch(() => alert('pass or username incorrect!!!'))
+  const handleLogin = async (credentials) => {
+    try {
+      dispatch(login(credentials))
+      window.localStorage.setItem(
+        'loggedUser', JSON.stringify(user)
+      )
+      dispatch(showMesssage('Great!You logged in!',5))
+    } catch (error) {
+      console.error(error)
+    }
+
   }
 
   return (
