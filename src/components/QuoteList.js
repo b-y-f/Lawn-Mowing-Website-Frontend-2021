@@ -14,6 +14,7 @@ export default function QuoteList({ bookings }){
             ))}
           </ul>
           <div>comments: {q.comment}</div>
+          <div>address: {q.address}</div>
         </div>
       ))}
     </div>

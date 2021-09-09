@@ -1,10 +1,9 @@
 import { React, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { initBookingById } from '../reducers/bookingReducer'
 import { login } from '../reducers/loginReducer'
 import { showMesssage } from '../reducers/noticeReducer'
 
-const Login = ({ user }) => {
+const Login = () => {
 
   const dispatch = useDispatch()
 
@@ -15,7 +14,7 @@ const Login = ({ user }) => {
     try {
       dispatch(login(credentials))
       dispatch(showMesssage('Great!You logged in!',5))
-      dispatch(initBookingById(user.id))
+      // dispatch(initBookingById(user.id))
 
     } catch (error) {
       console.error(error)

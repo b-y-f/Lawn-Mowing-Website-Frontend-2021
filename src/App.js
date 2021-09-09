@@ -31,13 +31,11 @@ const App = () => {
 
   useEffect(() => {
 
-    if(user) dispatch(initBookingById(user.id))
-
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
       setUser(loggedUserJSON)
     }
-
+    if(user) dispatch(initBookingById(user.id))
 
 
   },[dispatch,user])

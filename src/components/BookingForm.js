@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createBooking } from '../reducers/bookingReducer'
+import Autocomplete from 'react-google-autocomplete'
+
+// TODO putin backend
+const GOOGLE_MAPS_API_KEY= 'AIzaSyA1EaNF4tg0OgNGox56rEPuADaHX4bdW_4'
 
 const QuoteForm = () => {
 
@@ -23,14 +27,15 @@ const QuoteForm = () => {
       .filter(Boolean)
       .map((i) => ({ item: i }))
 
+    // console.log(address)
+
     const booking ={
       serviceItem: serviceSelected,
       comment,
       address,
     }
 
-    dispatch( createBooking(booking) )
-
+    dispatch( createBooking(booking))
     setComment('')
     setAddress('')
     setIslLawnMowing(false)
@@ -40,7 +45,7 @@ const QuoteForm = () => {
 
   return (
     <>
-      <h2>New Quote</h2>
+      <h2>New Booking</h2>
       <form onSubmit={submitQuote}>
         <div>
           <p>choice service</p>
@@ -85,9 +90,13 @@ const QuoteForm = () => {
 
         <div>
           Service at
-          <input
-            value={address}
-            onChange={({ target }) => setAddress(target.value)}
+          <Autocomplete apiKey={GOOGLE_MAPS_API_KEY}
+            onPlaceSelected={(place) => setAddress(place.formatted_address)}
+            options={{
+              types: ['address'],
+              fields: ['formatted_address'],
+              componentRestrictions: { country: 'nz' },
+            }}
           />
         </div>
 
