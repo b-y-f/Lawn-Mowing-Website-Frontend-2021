@@ -16,10 +16,11 @@ import Navbar from './components/Navbar'
 import { Container } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { showMesssage } from './reducers/noticeReducer'
-import QuoteList from './components/QuoteList'
+import QuoteList from './components/BookingList'
 import { sortBookingsByDate } from './helpers/sortHelper'
 import { initBookingAll, initBookingById } from './reducers/bookingReducer'
 import { setUser } from './reducers/loginReducer'
+import AdminLogin from './components/AdminLogin'
 
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
   const user = useSelector(state => state.user)
   const bookings = useSelector(state => state.bookings)
   const sortedBookings = sortBookingsByDate(bookings)
+  const admin = null
 
   useEffect(() => {
 
@@ -56,6 +58,14 @@ const App = () => {
 
       <Container maxWidth="sm">
         <Switch>
+          <Route path="/admin/login">
+            <AdminLogin />
+          </Route>
+
+          <Route path="/admin">
+            {admin? <>ok</>: <Redirect to="admin/login" />}
+          </Route>
+
           <Route path="/signup">
             <SignupForm handleCreateUser={handleCreateUser} />
           </Route>
