@@ -81,7 +81,7 @@ const App = () => {
           <Route path="/clients/:id">
             {user ?
               <>
-                <QuoteFrom />
+                <QuoteFrom user={user}/>
                 <QuoteList bookings={sortedBookings} />
               </>
               : <Redirect to="/login" />}

@@ -3,10 +3,8 @@ import { useDispatch } from 'react-redux'
 import { createBooking } from '../reducers/bookingReducer'
 import Autocomplete from 'react-google-autocomplete'
 
-// TODO putin backend
-const GOOGLE_MAPS_API_KEY= 'AIzaSyA1EaNF4tg0OgNGox56rEPuADaHX4bdW_4'
 
-const QuoteForm = () => {
+const QuoteForm = ({ user }) => {
 
   const dispatch = useDispatch()
 
@@ -90,7 +88,7 @@ const QuoteForm = () => {
 
         <div>
           Service at
-          <Autocomplete apiKey={GOOGLE_MAPS_API_KEY}
+          <Autocomplete apiKey={user.googleApiKey}
             onPlaceSelected={(place) => setAddress(place.formatted_address)}
             options={{
               types: ['address'],
