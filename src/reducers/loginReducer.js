@@ -18,7 +18,6 @@ export function login(credentials){
     const user = await loginService.login(credentials)
     window.localStorage.setItem('loggedUser', JSON.stringify(user))
     quoteService.setToken(user.token)
-
     return dispatch({
       type:'LOGIN',
       user
@@ -27,13 +26,13 @@ export function login(credentials){
 }
 
 export function logout(){
+  window.localStorage.clear()
   return {
     type: 'LOGOUT'
   }
 }
 
-export function setUser(loggedUserJSON){
-  const user = JSON.parse(loggedUserJSON)
+export function setUser(user){
   quoteService.setToken(user.token)
   return {
     type: 'LOGIN',

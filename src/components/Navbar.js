@@ -4,14 +4,15 @@ import { AppBar, Toolbar, Button } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { logout } from '../reducers/loginReducer'
 import { showMesssage } from '../reducers/noticeReducer'
+import { clearBookings } from '../reducers/bookingReducer'
 
 export default function Navbar({ user }) {
 
   const dispatch = useDispatch()
 
   const handleLogout = () => {
-    window.localStorage.clear()
     dispatch(logout())
+    dispatch(clearBookings())
     dispatch(showMesssage('Great!You logged out!',5))
   }
 

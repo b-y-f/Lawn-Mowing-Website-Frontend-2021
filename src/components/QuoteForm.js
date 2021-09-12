@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function ClientQuoteFrom(){
+export default function QuoteFrom(){
   return(
     <>
     client

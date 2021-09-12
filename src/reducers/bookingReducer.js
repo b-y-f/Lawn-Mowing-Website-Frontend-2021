@@ -7,8 +7,16 @@ const bookingReducer = (state=[],action) => {
     return action.initBookings
   case 'NEW_BOOKING':
     return state.concat(action.newBooking)
+  case 'CLEAR_BOOKINGS':
+    return []
   default:
     return state
+  }
+}
+
+export function clearBookings(){
+  return{
+    type:'CLEAR_BOOKINGS'
   }
 }
 

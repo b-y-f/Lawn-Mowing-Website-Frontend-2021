@@ -7,6 +7,7 @@ const Login = () => {
 
   const dispatch = useDispatch()
 
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -14,7 +15,6 @@ const Login = () => {
     try {
       dispatch(login(credentials))
       dispatch(showMesssage('Great!You logged in!',5))
-      // dispatch(initBookingById(user.id))
 
     } catch (error) {
       console.error(error)

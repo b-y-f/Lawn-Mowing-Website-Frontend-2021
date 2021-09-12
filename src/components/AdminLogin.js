@@ -1,6 +1,5 @@
 import React from 'react'
 import { useForm,Controller } from 'react-hook-form'
-import adminService from '../services/admin'
 
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -8,6 +7,8 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
+import { useDispatch } from 'react-redux'
+import { login } from '../reducers/adminReducer'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,19 +28,13 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function AdminLogin() {
+
+  const dispatch = useDispatch()
+
   const classes = useStyles()
-
-
   const { handleSubmit, control } = useForm()
-  const onSubmit = async data => {
-    console.log(data)
-    const res = await adminService.login(data)
-    if(res){
-      alert('ok')
-      // dispatch to admin user
-    }else{
-      alert('wrong')
-    }
+  const onSubmit = data => {
+    dispatch(login(data))
   }
 
 

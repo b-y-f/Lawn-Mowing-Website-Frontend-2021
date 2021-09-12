@@ -9,19 +9,20 @@ const noticeReducer = ( state = null, action ) => {
 
 let timer
 export const showMesssage = ( message, duration ) => {
+
   return dispatch => {
-    dispatch( {
+    dispatch({
       type: 'SET_MESSAGE',
       message
     })
-    clearTimeout(timer)
+
     setTimeout(() => {
       dispatch({
         type:'SET_MESSAGE',
         message:null
       })
-
     },duration*1000)
+    clearTimeout(timer)
   }
 }
 

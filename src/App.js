@@ -19,28 +19,30 @@ import { showMesssage } from './reducers/noticeReducer'
 import QuoteList from './components/BookingList'
 import { sortBookingsByDate } from './helpers/sortHelper'
 import { initBookingAll, initBookingById } from './reducers/bookingReducer'
-import { setUser } from './reducers/loginReducer'
+import { logout, setUser } from './reducers/loginReducer'
 import AdminLogin from './components/AdminLogin'
-
+import AdminDashboard from './components/AdminDashboard'
 
 const App = () => {
 
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
   const bookings = useSelector(state => state.bookings)
+  const admin = useSelector(state => state.admin)
   const sortedBookings = sortBookingsByDate(bookings)
-  const admin = null
+
+  if(admin) dispatch(logout())
 
   useEffect(() => {
-
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
-      setUser(loggedUserJSON)
+      const user = JSON.parse(loggedUserJSON)
+      dispatch(setUser(user))
+      dispatch(initBookingById(user.id))
     }
-    if(user) dispatch(initBookingById(user.id))
 
-
-  },[dispatch,user])
+    if(admin) dispatch(initBookingAll())
+  },[dispatch,admin])
 
   const handleCreateUser = async (userObj) => {
     try {
@@ -59,11 +61,11 @@ const App = () => {
       <Container maxWidth="sm">
         <Switch>
           <Route path="/admin/login">
-            <AdminLogin />
+            {admin?<Redirect to="/admin" />:<AdminLogin />}
           </Route>
 
-          <Route path="/admin">
-            {admin? <>ok</>: <Redirect to="admin/login" />}
+          <Route path="/admin" component={AdminDashboard}>
+            {admin? <AdminDashboard bookings={bookings} />: <Redirect to="admin/login" />}
           </Route>
 
           <Route path="/signup">
