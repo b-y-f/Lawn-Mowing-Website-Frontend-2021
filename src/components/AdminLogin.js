@@ -1,37 +1,20 @@
 import React from 'react'
 import { useForm,Controller } from 'react-hook-form'
 
-import Button from '@material-ui/core/Button'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/core/styles'
-import Container from '@material-ui/core/Container'
+import Button from '@mui/material/Button'
+import CssBaseline from '@mui/material/CssBaseline'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
+import Container from '@mui/material/Container'
 import { useDispatch } from 'react-redux'
 import { login } from '../reducers/adminReducer'
 
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  form: {
-    width: '100%',
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}))
 
 export default function AdminLogin() {
 
   const dispatch = useDispatch()
 
-  const classes = useStyles()
   const { handleSubmit, control } = useForm()
   const onSubmit = data => {
     dispatch(login(data))
@@ -41,13 +24,13 @@ export default function AdminLogin() {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
+      <div className="">
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className={classes.form}>
+          className="">
           <Controller
             name="username"
             control={control}
@@ -87,7 +70,7 @@ export default function AdminLogin() {
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
+            className=""
           >
             Sign In
           </Button>

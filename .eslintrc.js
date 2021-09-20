@@ -1,8 +1,8 @@
-/* eslint-env node */
 module.exports = {
   'env': {
     'browser': true,
-    'es6': true,
+    'es2021': true,
+    'node': true,
     'jest/globals': true
   },
   'extends': [
@@ -13,7 +13,7 @@ module.exports = {
     'ecmaFeatures': {
       'jsx': true
     },
-    'ecmaVersion': 2018,
+    'ecmaVersion': 2021,
     'sourceType': 'module'
   },
   'plugins': [
@@ -26,7 +26,7 @@ module.exports = {
     ],
     'linebreak-style': [
       'error',
-      'unix'
+      process.platform === 'win32' ? 'windows' : 'unix'
     ],
     'quotes': [
       'error',

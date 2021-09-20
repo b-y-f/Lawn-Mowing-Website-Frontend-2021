@@ -1,6 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { AppBar, Toolbar, Button } from '@material-ui/core'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import Button from '@mui/material/Button'
+
 import { useDispatch } from 'react-redux'
 import { logout } from '../reducers/loginReducer'
 import { showMesssage } from '../reducers/noticeReducer'
