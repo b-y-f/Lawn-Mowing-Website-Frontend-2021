@@ -24,6 +24,7 @@ import AdminLogin from './components/AdminLogin'
 import AdminDashboard from './components/AdminDashboard'
 import Signup from './components/Signup'
 import { AuthProvider } from './contexts/AuthContext'
+import ForgotPassword from './components/ForgotPassword'
 
 const App = () => {
 
@@ -66,6 +67,7 @@ const App = () => {
           <Switch>
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
+            <Route path="/forgot-password" component={ForgotPassword} />
 
             <Route path="/admin/login">
               {admin?<Redirect to="/admin" />:<AdminLogin />}
@@ -74,8 +76,6 @@ const App = () => {
             <Route path="/admin" component={AdminDashboard}>
               {admin? <AdminDashboard bookings={bookings} />: <Redirect to="admin/login" />}
             </Route>
-
-
 
             <Route path="/quote">
             some quote form

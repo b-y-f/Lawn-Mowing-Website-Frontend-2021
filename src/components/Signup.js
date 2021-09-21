@@ -1,5 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { Link, useHistory } from 'react-router-dom'
 
 // style
 import Avatar from '@mui/material/Avatar'
@@ -7,7 +8,7 @@ import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
 // import Checkbox from '@mui/material/Checkbox'
-import Link from '@mui/material/Link'
+import { Link as UILink } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -23,6 +24,8 @@ export default function Signup() {
 
   const { handleSubmit, register, formState: { errors } } = useForm()
 
+  const history = useHistory()
+
 
   // console.log(watch())
   const onSubmit = async data => {
@@ -35,6 +38,7 @@ export default function Signup() {
       console.log(data.email, data.password)
       await signup(data.email, data.password)
       alert('signup ok')
+      history.push('/')
     } catch (err) {
       console.log(err)
     }
@@ -120,8 +124,10 @@ export default function Signup() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/login" variant="body2">
+                <Link to="/login">
+                  <UILink variant="body2">
                   Already have an account? Sign in
+                  </UILink>
                 </Link>
               </Grid>
             </Grid>
