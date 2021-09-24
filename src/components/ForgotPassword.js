@@ -1,4 +1,5 @@
-import React from 'react'
+/* eslint-disable no-unused-vars */
+import React,{ useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '../contexts/AuthContext'
 import { useHistory } from 'react-router-dom'
@@ -77,6 +78,8 @@ export default function ForgotPassword() {
             >
               reset password
             </Button>
+
+
 
           </Box>
         </Box>

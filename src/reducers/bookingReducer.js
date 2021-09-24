@@ -1,5 +1,5 @@
 import bookingService from '../services/booking'
-import clientService from '../services/client'
+import clientService from '../services/user'
 
 const bookingReducer = (state=[],action) => {
   switch (action.type) {

@@ -33,7 +33,7 @@ export default function Login() {
 
     try {
       const res = await login(data.email, data.password)
-      console.log('ok',res)
+      console.log('login good!',res)
       history.push('/')
     } catch (err) {
       console.log(err)

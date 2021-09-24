@@ -1,52 +1,108 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
+import { useHistory } from 'react-router-dom'
+
+
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
-import Button from '@mui/material/Button'
+import Menu from '@mui/material/Menu'
+import { Avatar, IconButton, MenuItem } from '@mui/material'
+import Typography from '@mui/material/Typography'
+import { Box } from '@mui/system'
 
-import { useDispatch } from 'react-redux'
-import { logout } from '../reducers/loginReducer'
-import { showMesssage } from '../reducers/noticeReducer'
-import { clearBookings } from '../reducers/bookingReducer'
 
-export default function Navbar({ user }) {
+export default function Navbar() {
 
-  const dispatch = useDispatch()
+  const { currentUser,logout } = useAuth()
 
-  const handleLogout = () => {
-    dispatch(logout())
-    dispatch(clearBookings())
-    dispatch(showMesssage('Great!You logged out!',5))
+  const [anchorEl, setAnchorEl] = React.useState(null)
+
+  const history = useHistory()
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget)
   }
 
-  const LoginOutBtn = () =>
-    user ? (
-      <Button color="inherit" onClick={() => handleLogout()}>
-        logout
-      </Button>
-    ) : (
-      <Button color="inherit" component={Link} to="/login">
-        login
-      </Button>
-    )
-  return (
-    <AppBar position="static">
-      <Toolbar>
-        {user ? (
-          <>
-            <Button color="inherit" component={Link} to="/quotes">
-              quotes
-            </Button>
-          </>
-        ) : null}
-        <LoginOutBtn />
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
 
-        {!user && (
-          <Button color="inherit" component={Link} to="/signup">
-            signup
-          </Button>
-        )}
-      </Toolbar>
-    </AppBar>
+  const handleProfile = () => {
+    setAnchorEl(null)
+    history.push('/profile')
+
+  }
+
+  async function handleLogout(){
+    setAnchorEl(null)
+    try {
+      await logout()
+      history.push('/')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+          </IconButton>
+          <Typography onClick={() => history.push('/')} variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Bookings
+          </Typography>
+
+          {currentUser && (
+            <div>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                  {currentUser?.photoURL
+                    ? <Avatar src={currentUser.photoURL} />
+                    : <Avatar>
+                      {currentUser?.displayName.charAt(0).toUpperCase()}
+                    </Avatar>}
+                </Typography>
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+
+                <MenuItem onClick={handleProfile}>
+                  Profile
+                </MenuItem>
+
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
+            </div>
+          )}
+        </Toolbar>
+      </AppBar>
+    </Box>
   )
 }
