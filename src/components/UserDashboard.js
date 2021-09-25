@@ -1,11 +1,21 @@
 /* eslint-disable no-unused-vars */
-import { CssBaseline } from '@mui/material'
+import { CssBaseline, Paper } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 // import { useHistory } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import userService from '../services/user'
 import { getAuth, updateProfile } from 'firebase/auth'
+import AddBooking from './AddBooking'
+import BookingList from './BookingList'
+import FilterAndSortBooking from './FilterAndSortBooking'
 const auth = getAuth()
+
+const paperStyle = {
+  minHeight: 600,
+  width: 360,
+  margin: '20px auto',
+  textAlign: 'center'
+}
 
 export default function UserDashboard(){
   const { currentUser } = useAuth()
@@ -20,7 +30,7 @@ export default function UserDashboard(){
       const res = await userService.getAll()
       const { bookings, ...rest } = res
 
-      console.log(res)
+      // console.log(res)
 
       setBookings(bookings)
       window.localStorage.setItem('userInfo', JSON.stringify(rest))
@@ -35,13 +45,21 @@ export default function UserDashboard(){
 
   },[currentUser])
 
-  console.log(currentUser.photoURL)
+  // console.log(currentUser.photoURL)
 
   return(
     <div>
       <CssBaseline />
-      <h2>User Dash</h2>
-      <p>{currentUser.email}</p>
+
+      <Paper elevation={3}  style={paperStyle}>
+        <AddBooking />
+
+        <FilterAndSortBooking />
+
+        <BookingList />
+
+      </Paper>
+
 
     </div>
   )
