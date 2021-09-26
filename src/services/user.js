@@ -1,10 +1,7 @@
 import axios from 'axios'
 const baseUrl = '/api/users'
+import { token } from './token'
 
-let token = null
-const setToken = newToken => {
-  token = `bearer ${newToken}`
-}
 
 
 const getAll = async() => {
@@ -21,7 +18,10 @@ const create = async newObject => {
 }
 
 const update = (newObject) => {
-  const request = axios.put(baseUrl, newObject)
+  const config = {
+    headers: { Authorization : token },
+  }
+  const request = axios.put(baseUrl, newObject,config)
   return request.then(response => response.data)
 }
 
@@ -30,4 +30,4 @@ const remove = (id) => {
   return request.then(response => response.data)
 }
 
-export default { getAll,create,update,remove,setToken }
+export default { getAll,create,update,remove }

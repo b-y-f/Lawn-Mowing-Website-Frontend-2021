@@ -8,6 +8,7 @@ import { getAuth, updateProfile } from 'firebase/auth'
 import AddBooking from './AddBooking'
 import BookingList from './BookingList'
 import FilterAndSortBooking from './FilterAndSortBooking'
+import { setToken } from '../services/token'
 const auth = getAuth()
 
 const paperStyle = {
@@ -26,7 +27,7 @@ export default function UserDashboard(){
     async function fetchData() {
       const token = await currentUser.getIdToken()
       // console.log(token)
-      userService.setToken(token)
+      setToken(token)
       const res = await userService.getAll()
       const { bookings, ...rest } = res
 
@@ -44,6 +45,7 @@ export default function UserDashboard(){
     fetchData()
 
   },[currentUser])
+  console.log(bookings)
 
   // console.log(currentUser.photoURL)
 
@@ -56,7 +58,7 @@ export default function UserDashboard(){
 
         <FilterAndSortBooking />
 
-        <BookingList />
+        <BookingList bookings={bookings}/>
 
       </Paper>
 

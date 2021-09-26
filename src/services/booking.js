@@ -1,14 +1,8 @@
 import axios from 'axios'
 const baseUrl = '/api/bookings'
+import { token } from './token'
 
-let token = null
-const setToken = newToken => {
-  token = `bearer ${newToken}`
-}
 
-const config = {
-  headers: { Authorization : token },
-}
 
 const getAll = async() => {
   const res = await axios.get(baseUrl)
@@ -21,6 +15,10 @@ const getById = async(id) => {
 }
 
 const create = async newObject => {
+  const config = {
+    headers: { Authorization : token },
+  }
+
   const response = await axios.post(baseUrl, newObject, config)
   return response.data
 }
@@ -35,4 +33,4 @@ const remove = async(id) => {
   return response.data
 }
 
-export default { getAll,create,update,remove,setToken,getById }
+export default { getAll,create,update,remove,getById }

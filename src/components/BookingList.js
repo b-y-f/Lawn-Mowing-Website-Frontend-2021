@@ -12,7 +12,11 @@ import Typography from '@mui/material/Typography'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import { List, ListItem } from '@mui/material'
+import { Divider, List, ListItem } from '@mui/material'
+import Chip from '@mui/material/Chip'
+import moment from 'moment'
+
+
 
 const ExpandMore = styled((props) => {
   // eslint-disable-next-line no-unused-vars
@@ -28,64 +32,75 @@ const ExpandMore = styled((props) => {
 
 
 
-export default function BookingList(){
+export default function BookingList({ bookings }){
   const [expanded, setExpanded] = useState(false)
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded)
+  const handleClick = (id) => {
+    setExpanded({
+      ...expanded,
+      [id]: !expanded[id]
+    })
   }
-
   return(
     <div>
       <h2>Booking List</h2>
       <List>
+        {bookings.map((booking,i) => (
+          <ListItem key={i}>
+            <Card sx={{ width:1 }}>
+              <CardHeader
+                action={
+                  <IconButton aria-label="settings">
+                    <MoreVertIcon />
+                  </IconButton>
+                }
+                title={moment(booking.bookingDate).format('LL')}
+                subheader={moment(booking.bookingDate).format('LT')}
+              />
 
-        <ListItem key={0}>
-          <Card sx={{ width:1 }}>
-            <CardHeader
-              action={
-                <IconButton aria-label="settings">
-                  <MoreVertIcon />
-                </IconButton>
-              }
-              title="September 14, 2016"
-              subheader="10:30AM  Statues:aaa"
-            />
-
-            <CardContent>
-              <Typography variant="body2" color="text.secondary">
-                worker: Jims
-              </Typography>
-            </CardContent>
-            <CardActions disableSpacing>
-              <IconButton aria-label="add to favorites">
-                <FavoriteIcon />
-              </IconButton>
-
-              <ExpandMore
-                expand={expanded}
-                onClick={handleExpandClick}
-                aria-expanded={expanded}
-                aria-label="show more"
-              >
-                <ExpandMoreIcon />
-              </ExpandMore>
-            </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
               <CardContent>
-                <Typography paragraph>Method:</Typography>
-                <Typography paragraph>
-                  Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
-                  aside for 10 minutes.
-                </Typography>
-                <Typography paragraph>
-                  let me thinkthink what to add?
-                </Typography>
+                <Typography paragraph>{booking.address} </Typography>
               </CardContent>
-            </Collapse>
-          </Card>
-        </ListItem>
+              <CardActions disableSpacing>
+                <IconButton aria-label="add to favorites">
+                  <FavoriteIcon />
+                </IconButton>
+                <Chip label={booking.status} color="primary" variant="outlined"  />
 
+                <ExpandMore
+                  expand={expanded}
+                  onClick={() => handleClick(i) }
+                  aria-expanded={expanded}
+                  aria-label="show more"
+                >
+                  <ExpandMoreIcon />
+                </ExpandMore>
+              </CardActions>
+              <Collapse in={expanded[i]} timeout="auto" unmountOnExit>
+                <CardContent>
+                  <Typography paragraph >Services you picked:</Typography>
+                  {booking.serviceItem.map(i => (
+                    <div key={i.item}>
+                      <Typography variant="body2" paragraph>
+                        {i.item}
+                      </Typography>
+                      <Typography variant="body2" paragraph>
+                        {i.serviceComment}
+                      </Typography>
+                      <Divider />
+                    </div>
+                  ))}
+
+
+                  {booking.worker &&
+                    <Typography variant="body2" color="text.secondary" align='right'>
+                    Worker: {booking.worker}
+                    </Typography>}
+                </CardContent>
+              </Collapse>
+            </Card>
+          </ListItem>
+        ))}
       </List>
     </div>
   )
