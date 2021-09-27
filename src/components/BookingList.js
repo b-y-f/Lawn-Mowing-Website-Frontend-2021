@@ -68,9 +68,9 @@ export default function BookingList({ bookings }){
                 <Chip label={booking.status} color="primary" variant="outlined"  />
 
                 <ExpandMore
-                  expand={expanded}
+                  expand={expanded[i]}
                   onClick={() => handleClick(i) }
-                  aria-expanded={expanded}
+                  aria-expanded={expanded[i]}
                   aria-label="show more"
                 >
                   <ExpandMoreIcon />
@@ -96,6 +96,8 @@ export default function BookingList({ bookings }){
                     <Typography variant="body2" color="text.secondary" align='right'>
                     Worker: {booking.worker}
                     </Typography>}
+                  {booking.adminComment &&
+                  <Typography paragraph >Admin comment:{booking.adminComment}</Typography>}
                 </CardContent>
               </Collapse>
             </Card>

@@ -70,10 +70,10 @@ export default function Navbar() {
                 color="inherit"
               >
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                  {currentUser?.photoURL
+                  { currentUser?.photoURL
                     ? <Avatar src={currentUser.photoURL} />
                     : <Avatar>
-                      {currentUser?.displayName.charAt(0).toUpperCase()}
+                      {currentUser?.displayName?.charAt(0).toUpperCase()}
                     </Avatar>}
                 </Typography>
               </IconButton>
