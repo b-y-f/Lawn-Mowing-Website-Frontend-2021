@@ -12,10 +12,14 @@ import Typography from '@mui/material/Typography'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import { Divider, List, ListItem } from '@mui/material'
+import { Divider, List, ListItem, Menu, MenuItem } from '@mui/material'
 import Chip from '@mui/material/Chip'
 import moment from 'moment'
-
+import bookingService from '../services/booking'
+import CancelIcon from '@mui/icons-material/Cancel'
+import { red } from '@mui/material/colors'
+import { useDispatch } from 'react-redux'
+import { showMessage } from '../reducers/noticeReducer'
 
 
 const ExpandMore = styled((props) => {
@@ -33,7 +37,20 @@ const ExpandMore = styled((props) => {
 
 
 export default function BookingList({ bookings }){
+
+  const dispatch = useDispatch()
+
   const [expanded, setExpanded] = useState(false)
+
+
+  const handleDelete = async(id) => {
+    if (window.confirm('Do you really want to cancel this booking?')) {
+      const res = await bookingService.remove(id)
+      dispatch(showMessage({ type:'success', text:res.message },5))
+      console.log(res)
+    }
+  }
+
 
   const handleClick = (id) => {
     setExpanded({
@@ -43,16 +60,17 @@ export default function BookingList({ bookings }){
   }
   return(
     <div>
-      <h2>Booking List</h2>
       <List>
+        <h2>Booking List</h2>
         {bookings.map((booking,i) => (
           <ListItem key={i}>
             <Card sx={{ width:1 }}>
               <CardHeader
                 action={
-                  <IconButton aria-label="settings">
-                    <MoreVertIcon />
+                  <IconButton aria-label="delete" onClick={() => handleDelete(booking.id)}>
+                    <CancelIcon sx={{ color: red[600] }} />
                   </IconButton>
+
                 }
                 title={moment(booking.bookingDate).format('LL')}
                 subheader={moment(booking.bookingDate).format('LT')}
@@ -90,7 +108,6 @@ export default function BookingList({ bookings }){
                       <Divider />
                     </div>
                   ))}
-
 
                   {booking.worker &&
                     <Typography variant="body2" color="text.secondary" align='right'>

@@ -9,9 +9,14 @@ import Menu from '@mui/material/Menu'
 import { Avatar, IconButton, MenuItem } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
+import { useSelector } from 'react-redux'
+import Notification from './Notification'
+
 
 
 export default function Navbar() {
+
+  const message = useSelector(state => state.message)
 
   const { currentUser,logout } = useAuth()
 
@@ -45,7 +50,7 @@ export default function Navbar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar>
         <Toolbar>
           <IconButton
             size="large"
@@ -101,8 +106,11 @@ export default function Navbar() {
               </Menu>
             </div>
           )}
+
         </Toolbar>
+        <Notification message={message} />
       </AppBar>
+
     </Box>
   )
 }

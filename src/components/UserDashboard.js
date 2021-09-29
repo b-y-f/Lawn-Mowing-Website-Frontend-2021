@@ -50,9 +50,7 @@ export default function UserDashboard(){
   // console.log(currentUser.photoURL)
 
   return(
-    <div>
-      <CssBaseline />
-
+    <div style={{ marginTop: 80 }}>
       <Paper elevation={3}  style={paperStyle}>
         <AddBooking />
 
@@ -61,8 +59,6 @@ export default function UserDashboard(){
         <BookingList bookings={bookings}/>
 
       </Paper>
-
-
     </div>
   )
 }

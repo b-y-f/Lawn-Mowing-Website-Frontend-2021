@@ -103,7 +103,7 @@ export default function Signup() {
               <Grid item xs={12}>
                 <TextField
                   error={errors.password?.type === 'minLength' && true}
-                  helperText={errors.password?.type === 'minLength' && 'At least 6 charactor long.'}
+                  helperText={errors.password?.type === 'minLength' && 'At least 6 characters long.'}
                   fullWidth
                   {...register('password',{ required:true, minLength:6 })}
                   label="Password"

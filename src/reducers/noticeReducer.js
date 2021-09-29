@@ -8,7 +8,7 @@ const noticeReducer = ( state = null, action ) => {
 }
 
 let timer
-export const showMesssage = ( message, duration ) => {
+export const showMessage = ( message, duration ) => {
 
   return dispatch => {
     dispatch({

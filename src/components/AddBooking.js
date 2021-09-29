@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { usePlacesWidget } from 'react-google-autocomplete'
 import bookingService from '../services/booking'
@@ -16,9 +16,18 @@ import DateAdapter from '@mui/lab/AdapterMoment'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 
 export default function AddBooking() {
-  const [defaultDate, setDefaultDate] = React.useState(new Date(Date.now() + ( 3600 * 1000 * 24)))
+  const [dateTime, setDateTime] = useState(new Date(Date.now() + ( 3600 * 1000 * 24)))
 
-  const { register,control, handleSubmit, watch, formState: { errors } } = useForm()
+  const { register,setValue,control, handleSubmit, watch, formState: { errors } } = useForm()
+
+  // console.log(watch())
+
+  const handleDateChange = (date) => {
+    setValue('bookingDate',date.format())
+    setDateTime(date.format())
+  }
+
+  // console.log(dateTime)
 
   const onSubmit = async data => {
     if(noServiceSelected){
@@ -57,10 +66,6 @@ export default function AddBooking() {
     },
   })
 
-  const handleChange = (newValue) => {
-    setDefaultDate(newValue)
-  }
-
   const ourServices = [{
     label:'Lawn Mowing',
     name:'lawnMowing',
@@ -79,8 +84,8 @@ export default function AddBooking() {
     noteName:'noteLandscaping'
   }, {
     label:'Gutter Clean',
-    name:'gutterCleanning',
-    noteName:'noteGutterCleanning'
+    name:'gutterCleansing',
+    noteName:'noteGutterCleansing'
   }, {
     label:'Trimming & Pruning',
     name:'trimmingPruning',
@@ -102,7 +107,7 @@ export default function AddBooking() {
           flexWrap: 'wrap',
           '& > :not(style)': {
             m: 1,
-            width:1
+            width:1,
           },
         }}
       >
@@ -110,11 +115,11 @@ export default function AddBooking() {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={1}>
               <DateTimePicker
+                renderInput={(props) => <TextField {...props} />}
                 label="Date&Time picker"
-                value={defaultDate}
+                value={dateTime}
                 {...register('bookingDate',{ required: true })}
-                onChange={handleChange}
-                renderInput={(params) => <TextField {...params} />}
+                onChange={handleDateChange}
               />
 
               <TextField
