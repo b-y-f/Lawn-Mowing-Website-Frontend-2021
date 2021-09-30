@@ -1,30 +1,42 @@
-import {  MenuItem, TextField } from '@mui/material'
+/* eslint-disable no-unused-vars */
+import {   MenuItem, TextField } from '@mui/material'
 import { Box } from '@mui/system'
 
 import React, { useState } from 'react'
 
-const orders = [
+const orderBy = [
   {
-    value: 'Date',
+    value: 'date',
     label: 'Date',
   },
   {
-    value: 'Worker Name',
+    value: 'name',
     label: 'Worker Name',
   },
   {
-    value: 'Address',
+    value: 'address',
     label: 'Address',
   },
 ]
 
-export default function FilterAndSortBooking (){
+const orderDirection = [
+  {
+    value: 'asc',
+    label: 'Ascending',
+  },
+  {
+    value: 'desc',
+    label: 'Descending',
+  },
+]
 
-  const [order, setOrder] = useState('Date')
+export default function FilterAndSortBooking ({ handleSearch,handleSort }){
 
-  const handleChange = (event) => {
-    setOrder(event.target.value)
-  }
+  const [ order,setOrder ] = useState('desc')
+  const [ sortBy, setSortBy ] = useState('date')
+
+  // console.log(order,sortBy)
+
   return (
     <Box
       component="form"
@@ -34,36 +46,45 @@ export default function FilterAndSortBooking (){
       noValidate
       autoComplete="off"
     >
-      <TextField id="outlined-basic" label="Search" variant="outlined" />
+      <TextField id="outlined-basic" label="Search address" variant="outlined"
+        onChange={(evt) => handleSearch(evt.target.value)} />
+
 
       <TextField
         id="outlined-select-currency"
         select
         label="Order by"
-        value={order}
-        onChange={handleChange}
+        value={sortBy}
+        onChange={(evt) => {
+          setSortBy(evt.target.value)
+          handleSort(order,evt.target.value)
+
+        } }
       >
-        {orders.map((option) => (
+        {orderBy.map((option) => (
           <MenuItem key={option.value} value={option.value}>
             {option.label}
           </MenuItem>
         ))}
       </TextField>
-
-
       <TextField
         id="outlined-select-currency"
         select
-        label="Order ways"
+        label="Order"
         value={order}
-        onChange={handleChange}
+        onChange={(evt) => {
+          setOrder(evt.target.value)
+          handleSort(evt.target.value,sortBy)
+
+        }}
       >
-        {orders.map((option) => (
+        {orderDirection.map((option) => (
           <MenuItem key={option.value} value={option.value}>
             {option.label}
           </MenuItem>
         ))}
       </TextField>
+
     </Box>
 
 

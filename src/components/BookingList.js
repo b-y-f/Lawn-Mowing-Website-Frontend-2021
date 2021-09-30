@@ -17,9 +17,11 @@ import moment from 'moment'
 import bookingService from '../services/booking'
 import CancelIcon from '@mui/icons-material/Cancel'
 import { red } from '@mui/material/colors'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { showMessage } from '../reducers/noticeReducer'
 import { removeBooking } from '../reducers/bookingReducer'
+import FilterAndSortBooking from './FilterAndSortBooking'
+import { sortAscByDate, sortDescByDate } from '../helpers/sortHelper'
 
 
 const ExpandMore = styled((props) => {
@@ -36,7 +38,30 @@ const ExpandMore = styled((props) => {
 
 
 
-export default function BookingList({ bookings }){
+export default function BookingList(){
+
+  const [filter,setFilter] =useState({
+    search:'',
+    sort:'desc', //required
+    sortBy:'date' //required
+  })
+
+  const bookings = useSelector(state => {
+    console.log(filter)
+    let sortedBookings
+    if (filter.sort==='desc'){
+      sortedBookings = sortDescByDate(state.bookings)
+    }else{
+      sortedBookings = sortAscByDate(state.bookings)
+    }
+
+    if(filter.search!=='' && filter.search.length>1){
+      return sortedBookings.filter(b => b.address.toLowerCase().includes(filter.search))
+    }
+
+    return sortedBookings
+
+  })
 
   const dispatch = useDispatch()
 
@@ -47,7 +72,7 @@ export default function BookingList({ bookings }){
     if (window.confirm('Do you really want to cancel this booking?')) {
       const res = await bookingService.remove(id)
       dispatch(removeBooking(id))
-      dispatch(showMessage({ type:'success', text:'zzzz' },5))
+      dispatch(showMessage({ type:'success', text:res.message },5))
       // console.log(res)
     }
   }
@@ -59,8 +84,25 @@ export default function BookingList({ bookings }){
       [id]: !expanded[id]
     })
   }
+
+  // filter and sort
+  const handleSearch= (text) => {
+    if (text!==''){
+      setFilter({ ...filter,search:text })
+    }
+  }
+
+  const handleSort = ( order, orderBy ) => {
+    console.log(order, orderBy)
+    setFilter({ ...filter, sort:order,sortBy:orderBy })
+  }
+
   return(
     <div>
+      <FilterAndSortBooking
+        handleSearch={handleSearch}
+        handleSort={handleSort} />
+
       <List>
         <h2>Booking List</h2>
         {bookings.map((booking,i) => (

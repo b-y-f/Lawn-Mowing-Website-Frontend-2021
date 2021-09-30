@@ -1,15 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { CssBaseline, Paper } from '@mui/material'
+import {  Paper } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-// import { useHistory } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import userService from '../services/user'
 import { getAuth, updateProfile } from 'firebase/auth'
 import AddBooking from './AddBooking'
 import BookingList from './BookingList'
-import FilterAndSortBooking from './FilterAndSortBooking'
 import { setToken } from '../services/token'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { initBooking } from '../reducers/bookingReducer'
 const auth = getAuth()
 
@@ -23,9 +21,6 @@ const paperStyle = {
 export default function UserDashboard(){
   const { currentUser } = useAuth()
   const dispatch = useDispatch()
-
-  const bookings = useSelector(state => state.bookings)
-  console.log(bookings)
 
   useEffect(() => {
     async function fetchData() {
@@ -48,7 +43,7 @@ export default function UserDashboard(){
     }
     fetchData()
 
-  },[currentUser,dispatch])
+  },[currentUser, dispatch])
 
   // console.log(currentUser.photoURL)
 
@@ -56,11 +51,7 @@ export default function UserDashboard(){
     <div style={{ marginTop: 80 }}>
       <Paper elevation={3}  style={paperStyle}>
         <AddBooking />
-
-        <FilterAndSortBooking />
-
-        <BookingList bookings={bookings}/>
-
+        <BookingList />
       </Paper>
     </div>
   )

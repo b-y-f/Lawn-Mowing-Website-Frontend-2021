@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm,Controller } from 'react-hook-form'
 import { usePlacesWidget } from 'react-google-autocomplete'
 import bookingService from '../services/booking'
 import { useDispatch } from 'react-redux'
@@ -22,7 +22,7 @@ export default function AddBooking() {
   const dispatch = useDispatch()
   const [dateTime, setDateTime] = useState(new Date(Date.now() + ( 3600 * 1000 * 24)))
 
-  const { register,setValue,control, handleSubmit, watch, formState: { errors } } = useForm()
+  const { register,setValue,reset, handleSubmit, watch,control, formState: { errors } } = useForm()
 
   // console.log(watch())
 
@@ -57,9 +57,11 @@ export default function AddBooking() {
     // console.log(bookingData)
 
     // const res = await bookingService.create(bookingData)
-
     dispatch(createBooking(bookingData))
+
     dispatch(showMessage({ type:'success', text:'Create new booking OK!!' },5))
+    reset()
+    // resetSelections()
   }
 
   const { ref } = usePlacesWidget({
@@ -98,11 +100,16 @@ export default function AddBooking() {
   }]
 
   const isCheckBoxSelected = (checkBoxName) => watch(checkBoxName,false)
-  // console.log(isCheckBoxSelected)
+  // console.log(isCheckBoxSelected('lawnMowing'))
   const noServiceSelected = watch(ourServices.map(s => s.name), false)
     .every(v => v===false)
   // console.log(notSelectedService)
 
+  // console.log('Form states',watch())
+
+  const handleCancelButton = () => {
+    reset()
+  }
 
   return (
     <LocalizationProvider dateAdapter={DateAdapter}>
@@ -133,8 +140,10 @@ export default function AddBooking() {
               {ourServices.map((service,i) => (
                 <Stack key={i} direction="row" spacing={2} alignItems='flex-start'>
                   <FormControlLabel
+                    checked={isCheckBoxSelected(service.name) || false}
                     {...register(service.name)}
-                    control={<Checkbox />} label={service.label} />
+                    label={service.label}
+                    control={<Checkbox />}  />
                   {isCheckBoxSelected(service.name) &&
                 <TextField
                   {...register(service.noteName)}
@@ -148,7 +157,7 @@ export default function AddBooking() {
 
               <Stack direction="row" spacing={2} justifyContent="center">
                 <Button type='submit' variant="contained" color="success">Add</Button>
-                <Button variant="contained" color="error">Cancel</Button>
+                <Button variant="contained" color="error" onClick={handleCancelButton}>Cancel</Button>
               </Stack>
             </Stack>
           </form>
