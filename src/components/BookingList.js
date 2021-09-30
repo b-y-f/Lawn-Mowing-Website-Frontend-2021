@@ -142,7 +142,7 @@ export default function BookingList(){
                   <Typography paragraph >Services you picked:</Typography>
                   {booking.serviceItem.map(i => (
                     <div key={i.item}>
-                      <Typography variant="body2" paragraph>
+                      <Typography variant="overline" paragraph>
                         {i.item}
                       </Typography>
                       <Typography variant="body2" paragraph>

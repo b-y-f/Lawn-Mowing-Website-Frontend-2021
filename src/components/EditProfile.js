@@ -35,7 +35,7 @@ export default function Signup() {
   useEffect(() => {
     const strUserInfo = window.localStorage.getItem('userInfo')
     const userInfo = JSON.parse(strUserInfo)
-    console.log(userInfo)
+    console.log('userInfo',userInfo)
 
     setValue('firstName', userInfo.firstName)
     setValue('lastName', userInfo.lastName)
@@ -51,7 +51,7 @@ export default function Signup() {
   const onSubmit = async data => {
 
     try {
-      console.log(data)
+      console.log('edit profile form data',data)
 
       await userService.update({
         firstName:data.firstName,
@@ -119,8 +119,8 @@ export default function Signup() {
 
               <Grid item xs={12}>
                 <TextField
-                  error={errors.email?.type === 'minLength' && true}
-                  helperText={errors.email?.type === 'minLength' && 'Input at least 6 digit.'}
+                  error={errors.phone?.type === 'minLength' && true}
+                  helperText={errors.phone?.type === 'minLength' && 'Input at least 6 digit.'}
                   fullWidth
                   id="phone"
                   label="Phone number"

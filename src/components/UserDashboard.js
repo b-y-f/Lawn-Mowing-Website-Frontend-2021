@@ -48,7 +48,7 @@ export default function UserDashboard(){
   // console.log(currentUser.photoURL)
 
   return(
-    <div style={{ marginTop: 80 }}>
+    <div>
       <Paper elevation={3}  style={paperStyle}>
         <AddBooking />
         <BookingList />

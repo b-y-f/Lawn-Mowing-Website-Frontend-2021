@@ -2,6 +2,9 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '../contexts/AuthContext'
 import { Link,useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { showMessage } from '../reducers/noticeReducer'
+
 
 // style
 import Avatar from '@mui/material/Avatar'
@@ -21,6 +24,8 @@ const theme = createTheme()
 
 export default function Login() {
 
+  const dispatch = useDispatch()
+
   const { handleSubmit, register, formState: { errors } } = useForm()
 
   const { login } = useAuth()
@@ -34,9 +39,11 @@ export default function Login() {
     try {
       const res = await login(data.email, data.password)
       console.log('login good!',res)
+      dispatch(showMessage({ type:'success',text:'login good!' },5))
       history.push('/')
     } catch (err) {
-      console.log(err)
+      dispatch(showMessage({ type:'error',text:'The password is invalid or the user does not have a password.' },5))
+      // console.log(err)
     }
   }
 

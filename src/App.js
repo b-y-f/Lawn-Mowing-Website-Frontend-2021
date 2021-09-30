@@ -36,7 +36,7 @@ const App = ({ props }) => {
         <div id="back-to-top-anchor" />
         <Navbar />
 
-        <Container maxWidth="sm">
+        <Container maxWidth="sm" style={{ marginTop: 80 }}>
 
           <Switch>
             <PrivateRoute exact path="/" component={UserDashboard} />

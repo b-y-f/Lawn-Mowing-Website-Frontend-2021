@@ -2,6 +2,8 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useHistory } from 'react-router-dom'
 import userService from '../services/user'
+import { useDispatch } from 'react-redux'
+import { showMessage } from '../reducers/noticeReducer'
 
 // style
 import Avatar from '@mui/material/Avatar'
@@ -21,6 +23,7 @@ import { useAuth } from '../contexts/AuthContext'
 const theme = createTheme()
 
 export default function Signup() {
+  const dispatch = useDispatch()
   const { signup } = useAuth()
 
   const { handleSubmit, register, formState: { errors } } = useForm()
@@ -41,10 +44,12 @@ export default function Signup() {
         firstName:data.firstName,
         lastName:data.lastName
       })
-      console.log('signup ok',res)
+      dispatch(showMessage({ type:'success',text:'Sign up successful!' },5))
+      // console.log('signup ok',res)
       history.push('/')
     } catch (err) {
-      console.log(err,'The email address is already in use by another account')
+      dispatch(showMessage({ type:'error',text:'The email address is already in use by another account.' },5))
+      // console.log(err)
     }
   }
 
