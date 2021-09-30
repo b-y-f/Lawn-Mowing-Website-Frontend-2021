@@ -11,8 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
-import { Divider, List, ListItem, Menu, MenuItem } from '@mui/material'
+import { Divider, List, ListItem } from '@mui/material'
 import Chip from '@mui/material/Chip'
 import moment from 'moment'
 import bookingService from '../services/booking'
@@ -20,6 +19,7 @@ import CancelIcon from '@mui/icons-material/Cancel'
 import { red } from '@mui/material/colors'
 import { useDispatch } from 'react-redux'
 import { showMessage } from '../reducers/noticeReducer'
+import { removeBooking } from '../reducers/bookingReducer'
 
 
 const ExpandMore = styled((props) => {
@@ -46,8 +46,9 @@ export default function BookingList({ bookings }){
   const handleDelete = async(id) => {
     if (window.confirm('Do you really want to cancel this booking?')) {
       const res = await bookingService.remove(id)
-      dispatch(showMessage({ type:'success', text:res.message },5))
-      console.log(res)
+      dispatch(removeBooking(id))
+      dispatch(showMessage({ type:'success', text:'zzzz' },5))
+      // console.log(res)
     }
   }
 

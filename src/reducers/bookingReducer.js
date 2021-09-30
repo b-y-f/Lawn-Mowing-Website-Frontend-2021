@@ -3,21 +3,31 @@ import bookingService from '../services/booking'
 const bookingReducer = (state=[],action) => {
   switch (action.type) {
   case 'INIT_BOOKINGS':
-    return action.initBookings
+    return action.bookings
   case 'NEW_BOOKING':
     return state.concat(action.newBooking)
+  case 'REMOVE_BOOKING':
+    return state.filter(b => b.id!==action.removeBookingId)
   default:
     return state
   }
 }
 
-export function initBookingAll(){
+export function initBooking(bookings){
+  return{
+    type:'INIT_BOOKINGS',
+    bookings
+  }
+}
 
+export function removeBooking(removeBookingId){
   return async dispatch => {
-    const initBookings = await bookingService.getAll()
+    const res = await bookingService.remove(removeBookingId)
+    console.log(res)
+
     dispatch({
-      type:'INIT_BOOKINGS',
-      initBookings
+      type:'REMOVE_BOOKING',
+      removeBookingId
     })
   }
 }

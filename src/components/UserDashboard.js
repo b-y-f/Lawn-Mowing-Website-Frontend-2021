@@ -9,6 +9,8 @@ import AddBooking from './AddBooking'
 import BookingList from './BookingList'
 import FilterAndSortBooking from './FilterAndSortBooking'
 import { setToken } from '../services/token'
+import { useDispatch, useSelector } from 'react-redux'
+import { initBooking } from '../reducers/bookingReducer'
 const auth = getAuth()
 
 const paperStyle = {
@@ -20,8 +22,10 @@ const paperStyle = {
 
 export default function UserDashboard(){
   const { currentUser } = useAuth()
+  const dispatch = useDispatch()
 
-  const [bookings, setBookings] = useState([])
+  const bookings = useSelector(state => state.bookings)
+  console.log(bookings)
 
   useEffect(() => {
     async function fetchData() {
@@ -33,7 +37,7 @@ export default function UserDashboard(){
 
       // console.log(res)
 
-      setBookings(bookings)
+      dispatch(initBooking(bookings))
       window.localStorage.setItem('userInfo', JSON.stringify(rest))
 
       await updateProfile(
@@ -44,8 +48,7 @@ export default function UserDashboard(){
     }
     fetchData()
 
-  },[currentUser])
-  console.log(bookings)
+  },[currentUser,dispatch])
 
   // console.log(currentUser.photoURL)
 

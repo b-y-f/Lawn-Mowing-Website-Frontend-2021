@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { usePlacesWidget } from 'react-google-autocomplete'
 import bookingService from '../services/booking'
+import { useDispatch } from 'react-redux'
 
 
 import Stack from '@mui/material/Stack'
@@ -14,8 +15,11 @@ import { Button, Checkbox, Divider } from '@mui/material'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import DateAdapter from '@mui/lab/AdapterMoment'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import { createBooking } from '../reducers/bookingReducer'
+import { showMessage } from '../reducers/noticeReducer'
 
 export default function AddBooking() {
+  const dispatch = useDispatch()
   const [dateTime, setDateTime] = useState(new Date(Date.now() + ( 3600 * 1000 * 24)))
 
   const { register,setValue,control, handleSubmit, watch, formState: { errors } } = useForm()
@@ -52,9 +56,10 @@ export default function AddBooking() {
     }
     // console.log(bookingData)
 
-    const res = await bookingService.create(bookingData)
-    console.log('ok!',res)
+    // const res = await bookingService.create(bookingData)
 
+    dispatch(createBooking(bookingData))
+    dispatch(showMessage({ type:'success', text:'Create new booking OK!!' },5))
   }
 
   const { ref } = usePlacesWidget({

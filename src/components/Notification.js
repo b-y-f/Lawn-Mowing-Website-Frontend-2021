@@ -8,7 +8,7 @@ const Notification =() => {
   const messageText = messageObj?.text
   const messageType = messageObj?.type
 
-  console.log(messageType)
+  // console.log(messageType,messageText)
 
 
   switch (messageType) {
