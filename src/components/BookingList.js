@@ -47,7 +47,7 @@ export default function BookingList(){
   })
 
   const bookings = useSelector(state => {
-    console.log(filter)
+    // console.log(filter)
     let sortedBookings
     if (filter.sort==='desc'){
       sortedBookings = sortDescByDate(state.bookings)

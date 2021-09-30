@@ -17,6 +17,8 @@ import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 import { useAuth } from '../contexts/AuthContext'
+import { useDispatch } from 'react-redux'
+import { showMessage } from '../reducers/noticeReducer'
 
 const theme = createTheme()
 
@@ -28,10 +30,12 @@ export default function Signup() {
   // const [userInfo, setUserInfo] = useState(null)
 
   const history = useHistory()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const strUserInfo = window.localStorage.getItem('userInfo')
     const userInfo = JSON.parse(strUserInfo)
+    console.log(userInfo)
 
     setValue('firstName', userInfo.firstName)
     setValue('lastName', userInfo.lastName)
@@ -55,9 +59,10 @@ export default function Signup() {
         phone:data.phone,
         photoURL:data.photoURL
       })
-      console.log('profile updated!')
+      dispatch(showMessage({ type:'success',text:'profile updated!' },5))
+      history.push('/')
     } catch (err) {
-      console.log(err,'ERR')
+      dispatch(showMessage({ type:'error',text:'Failed' },5))
     }
   }
 
