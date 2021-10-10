@@ -2,21 +2,17 @@ import React from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useHistory } from 'react-router-dom'
 
-
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Menu from '@mui/material/Menu'
-import { Avatar, IconButton, MenuItem } from '@mui/material'
+import {  Avatar, IconButton, MenuItem } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
-import { useSelector } from 'react-redux'
 import Notification from './Notification'
 
 
 
 export default function Navbar() {
-
-  const message = useSelector(state => state.message)
 
   const { currentUser,logout } = useAuth()
 
@@ -108,7 +104,7 @@ export default function Navbar() {
           )}
 
         </Toolbar>
-        <Notification message={message} />
+        <Notification />
       </AppBar>
 
     </Box>

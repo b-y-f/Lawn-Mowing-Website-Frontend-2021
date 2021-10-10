@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { React, useEffect } from 'react'
+import { React } from 'react'
 import Login from './components/Login'
 
 import {
@@ -7,8 +7,9 @@ import {
   Route,
 } from 'react-router-dom'
 
+
 import Container from '@mui/material/Container'
-import AdminDashboard from './components/AdminDashboard'
+
 import Signup from './components/Signup'
 import { AuthProvider } from './contexts/AuthContext'
 import ForgotPassword from './components/ForgotPassword'
@@ -20,14 +21,11 @@ import { CssBaseline } from '@mui/material'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import Fab from '@mui/material/Fab'
 import ScrollTop from './components/ScrollTop'
+import Page404 from './components/Page404'
 
 
 
 const App = ({ props }) => {
-
-  // const dispatch = useDispatch()
-
-
 
   return (
     <>
@@ -44,8 +42,7 @@ const App = ({ props }) => {
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
             <Route path="/forgot-password" component={ForgotPassword} />
-
-            <Route path="/admin" component={AdminDashboard} />
+            <Route path="/*" component={Page404} />
           </Switch>
 
           <ScrollTop {...props}>
