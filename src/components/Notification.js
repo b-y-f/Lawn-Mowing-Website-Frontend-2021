@@ -12,7 +12,7 @@ const Notification =() => {
   // console.log('showMessage',showMessage)
 
   return(
-    <Snackbar open={showMessage} autoHideDuration={6000}>
+    <Snackbar open={showMessage}>
       <Alert severity={messageType} sx={{ width: '100%' }}>
         {messageText}
       </Alert>

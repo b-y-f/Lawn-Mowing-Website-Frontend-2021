@@ -9,9 +9,8 @@ import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
-import FavoriteIcon from '@mui/icons-material/Favorite'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Divider, List, ListItem } from '@mui/material'
+import { Divider, List, ListItem, Rating } from '@mui/material'
 import Chip from '@mui/material/Chip'
 import moment from 'moment'
 import bookingService from '../services/booking'
@@ -25,7 +24,6 @@ import { sortAscByDate, sortDescByDate } from '../helpers/sortHelper'
 
 
 const ExpandMore = styled((props) => {
-  // eslint-disable-next-line no-unused-vars
   const { expand, ...other } = props
   return <IconButton {...other} />
 })(({ theme, expand }) => ({
@@ -47,7 +45,6 @@ export default function BookingList(){
   })
 
   const bookings = useSelector(state => {
-    // console.log(filter)
     let sortedBookings
     if (filter.sort==='desc'){
       sortedBookings = sortDescByDate(state.bookings)
@@ -62,6 +59,8 @@ export default function BookingList(){
     return sortedBookings
 
   })
+  console.log(bookings)
+
 
   const dispatch = useDispatch()
 
@@ -97,6 +96,50 @@ export default function BookingList(){
     setFilter({ ...filter, sort:order,sortBy:orderBy })
   }
 
+  const handleRating = (id,rating) => {
+    bookingService.update(id,{ rating }).then((res) => {
+      dispatch(showMessage({ type:'success', text:'Your rating has been updated!' },5))
+      // console.log('ok',res)
+    }).catch(err => {
+      console.log(err)
+    })
+    // console.log(rating,id)
+  }
+
+  const handleStatusCondition = (id,status, prevRating) => {
+    if (status==='completed'){
+      return (
+        <Rating
+          onChange={(event,newValue) => handleRating(id,newValue)}
+          name="half-rating" value={prevRating} precision={0.5} />
+      )
+    }
+  }
+
+  const handleChip = (status) => {
+    console.log(status)
+    let color
+    switch (status) {
+    case 'pending':
+      color='primary'
+      break
+    case 'completed':
+      color='secondary'
+      break
+    case 'approved':
+      color='success'
+      break
+    case 'declined':
+      color ='error'
+      break
+    default:
+      break
+    }
+    return (
+      <Chip label={status} color={color} variant="filled"  />
+    )
+  }
+
   return(
     <div>
       <FilterAndSortBooking
@@ -123,11 +166,8 @@ export default function BookingList(){
                 <Typography paragraph>{booking.address} </Typography>
               </CardContent>
               <CardActions disableSpacing>
-                <IconButton aria-label="add to favorites">
-                  <FavoriteIcon />
-                </IconButton>
-                <Chip label={booking.status} color="primary" variant="outlined"  />
-
+                {handleChip(booking.status)}
+                {handleStatusCondition(booking.id,booking.status,booking.rating)}
                 <ExpandMore
                   expand={expanded[i]}
                   onClick={() => handleClick(i) }
@@ -148,13 +188,14 @@ export default function BookingList(){
                       <Typography variant="body2" paragraph>
                         {i.serviceComment}
                       </Typography>
-                      <Divider />
                     </div>
                   ))}
-
-                  {booking.worker &&
+                  <Typography paragraph >Your Note on Booking:</Typography>
+                  {booking.bookingNote}
+                  <Divider />
+                  {booking.worker.length!==0 &&
                     <Typography variant="body2" color="text.secondary" align='right'>
-                    Worker: {booking.worker}
+                    Worker: {booking.worker.join(', ')}
                     </Typography>}
                   {booking.adminComment &&
                   <Typography paragraph >Admin comment:{booking.adminComment}</Typography>}

@@ -41,6 +41,7 @@ export default function AddBooking() {
 
     const bookingData = {
       address:data.address,
+      bookingNote:data.bookingNote,
       bookingDate:data.bookingDate,
       serviceItem: ourServices.map(s => {
         const serviceName = s.name
@@ -152,8 +153,8 @@ export default function AddBooking() {
                 </Stack>
               ))}
 
-
-              <TextField id="note" label="Notes" variant="outlined" />
+              <TextField {...register('bookingNote')}
+                id="bookingNote" variant="outlined" />
 
               <Stack direction="row" spacing={2} justifyContent="center">
                 <Button type='submit' variant="contained" color="success">Add</Button>
