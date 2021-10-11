@@ -10,7 +10,7 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Divider, List, ListItem, Rating } from '@mui/material'
+import { Divider, List, ListItem, Rating, Stack } from '@mui/material'
 import Chip from '@mui/material/Chip'
 import moment from 'moment'
 import bookingService from '../services/booking'
@@ -111,7 +111,7 @@ export default function BookingList(){
       return (
         <Rating
           onChange={(event,newValue) => handleRating(id,newValue)}
-          name="half-rating" value={prevRating} precision={0.5} />
+          name="half-rating" defaultValue={prevRating} precision={0.5} />
       )
     }
   }
@@ -140,6 +140,16 @@ export default function BookingList(){
     )
   }
 
+  const handleRenderNote = (bookingNote) => {
+    return (
+      <>
+        <Divider />
+        <Typography paragraph >Your Note on Booking:</Typography>
+        {bookingNote}
+      </>
+    )
+  }
+
   return(
     <div>
       <FilterAndSortBooking
@@ -165,9 +175,12 @@ export default function BookingList(){
               <CardContent>
                 <Typography paragraph>{booking.address} </Typography>
               </CardContent>
-              <CardActions disableSpacing>
-                {handleChip(booking.status)}
-                {handleStatusCondition(booking.id,booking.status,booking.rating)}
+              <CardActions>
+                <Stack direction="row" spacing={2}>
+                  {handleChip(booking.status)}
+                  {handleStatusCondition(booking.id,booking.status,booking.rating)}
+                </Stack>
+
                 <ExpandMore
                   expand={expanded[i]}
                   onClick={() => handleClick(i) }
@@ -190,9 +203,8 @@ export default function BookingList(){
                       </Typography>
                     </div>
                   ))}
-                  <Typography paragraph >Your Note on Booking:</Typography>
-                  {booking.bookingNote}
-                  <Divider />
+                  {booking.bookingNote && handleRenderNote(booking.bookingNote)}
+
                   {booking.worker.length!==0 &&
                     <Typography variant="body2" color="text.secondary" align='right'>
                     Worker: {booking.worker.join(', ')}

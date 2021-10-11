@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import {  Paper } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import userService from '../services/user'
@@ -9,6 +8,12 @@ import BookingList from './BookingList'
 import { setToken } from '../services/token'
 import { useDispatch } from 'react-redux'
 import { initBooking } from '../reducers/bookingReducer'
+
+// UI
+import { Button, Paper } from '@mui/material'
+import Collapse from '@mui/material/Collapse'
+import AddTaskIcon from '@mui/icons-material/AddTask'
+
 const auth = getAuth()
 
 const paperStyle = {
@@ -21,6 +26,8 @@ const paperStyle = {
 export default function UserDashboard(){
   const { currentUser } = useAuth()
   const dispatch = useDispatch()
+  const [openAddBooking,setOpenAddBooking] = useState(false)
+  const [showAddButton, setShowAddButton] = useState(true)
 
   useEffect(() => {
     async function fetchData() {
@@ -46,11 +53,32 @@ export default function UserDashboard(){
   },[currentUser, dispatch])
 
   // console.log(currentUser.photoURL)
+  const renderAddBookingButton = () => (
+    <Button
+      onClick={() => {
+        setShowAddButton(false)
+        setOpenAddBooking(true)
+      }}
+      color='success' sx={{ m:2 }}
+      variant="contained" endIcon={<AddTaskIcon />}>
+      add booking
+    </Button>
+  )
+
+
+  const handleHideAddBookingButton = () => {
+    setShowAddButton(!showAddButton)
+    setOpenAddBooking(!openAddBooking)
+  }
 
   return(
     <div>
-      <Paper elevation={3}  style={paperStyle}>
-        <AddBooking />
+      <Paper elevation={3} style={paperStyle}>
+        {showAddButton && renderAddBookingButton()}
+
+        <Collapse in={openAddBooking}>
+          <AddBooking handleHideAddBookingButton={handleHideAddBookingButton} />
+        </Collapse>
         <BookingList />
       </Paper>
     </div>

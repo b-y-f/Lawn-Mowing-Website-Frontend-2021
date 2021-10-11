@@ -1,28 +1,26 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react'
-import { useForm,Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { usePlacesWidget } from 'react-google-autocomplete'
-import bookingService from '../services/booking'
 import { useDispatch } from 'react-redux'
 
 
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import DateTimePicker from '@mui/lab/DateTimePicker'
-import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
-import { Button, Checkbox, Divider } from '@mui/material'
+import { Button, Checkbox } from '@mui/material'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import DateAdapter from '@mui/lab/AdapterMoment'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import { createBooking } from '../reducers/bookingReducer'
 import { showMessage } from '../reducers/noticeReducer'
 
-export default function AddBooking() {
+export default function AddBooking({ handleHideAddBookingButton }) {
   const dispatch = useDispatch()
   const [dateTime, setDateTime] = useState(new Date(Date.now() + ( 3600 * 1000 * 24)))
 
-  const { register,setValue,reset, handleSubmit, watch,control, formState: { errors } } = useForm()
+  const { register,setValue,reset, handleSubmit, watch } = useForm()
 
   // console.log(watch())
 
@@ -109,6 +107,7 @@ export default function AddBooking() {
 
   const handleCancelButton = () => {
     reset()
+    handleHideAddBookingButton()
   }
 
   return (
@@ -118,50 +117,48 @@ export default function AddBooking() {
           display: 'flex',
           flexWrap: 'wrap',
           '& > :not(style)': {
-            m: 1,
+            m: 2,
             width:1,
           },
         }}
       >
-        <Paper elevation={1}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing={1}>
-              <DateTimePicker
-                renderInput={(props) => <TextField {...props} />}
-                label="Date&Time picker"
-                value={dateTime}
-                {...register('bookingDate',{ required: true })}
-                onChange={handleDateChange}
-              />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Stack spacing={1}>
+            <DateTimePicker
+              renderInput={(props) => <TextField {...props} />}
+              label="Date&Time picker"
+              value={dateTime}
+              {...register('bookingDate',{ required: true })}
+              onChange={handleDateChange}
+            />
 
-              <TextField
-                {...register('address', { required: true })}
-                inputProps={{ ref: ref }} label="Where to service" variant="outlined" />
-              {ourServices.map((service,i) => (
-                <Stack key={i} direction="row" spacing={2} alignItems='flex-start'>
-                  <FormControlLabel
-                    checked={isCheckBoxSelected(service.name) || false}
-                    {...register(service.name)}
-                    label={service.label}
-                    control={<Checkbox />}  />
-                  {isCheckBoxSelected(service.name) &&
+            <TextField
+              {...register('address', { required: true })}
+              inputProps={{ ref: ref }} label="Where to service" variant="outlined" />
+            {ourServices.map((service,i) => (
+              <Stack key={i} direction="row" spacing={2} alignItems='flex-start'>
+                <FormControlLabel
+                  checked={isCheckBoxSelected(service.name) || false}
+                  {...register(service.name)}
+                  label={service.label}
+                  control={<Checkbox />}  />
+                {isCheckBoxSelected(service.name) &&
                 <TextField
                   {...register(service.noteName)}
                   variant="outlined"
                   label={`Notes for ${service.label}(Optional)`} />}
-                </Stack>
-              ))}
-
-              <TextField {...register('bookingNote')}
-                id="bookingNote" variant="outlined" />
-
-              <Stack direction="row" spacing={2} justifyContent="center">
-                <Button type='submit' variant="contained" color="success">Add</Button>
-                <Button variant="contained" color="error" onClick={handleCancelButton}>Cancel</Button>
               </Stack>
+            ))}
+
+            <TextField {...register('bookingNote')}
+              id="bookingNote" variant="outlined" />
+
+            <Stack direction="row" spacing={2} justifyContent="center">
+              <Button type='submit' variant="contained" color="success">Add</Button>
+              <Button variant="contained" color="error" onClick={handleCancelButton}>Cancel</Button>
             </Stack>
-          </form>
-        </Paper>
+          </Stack>
+        </form>
       </Box>
     </LocalizationProvider>
   )
