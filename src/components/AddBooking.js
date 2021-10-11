@@ -35,10 +35,9 @@ export default function AddBooking() {
 
   const onSubmit = async data => {
     if(noServiceSelected){
-      return alert('Pls check at least one service')
+      return dispatch(showMessage({ type:'warning', text:'Please check at least one service!' },5))
+      // return alert('Pls check at least one service')
     }
-    // console.log(data)
-
     const bookingData = {
       address:data.address,
       bookingNote:data.bookingNote,
@@ -102,9 +101,9 @@ export default function AddBooking() {
 
   const isCheckBoxSelected = (checkBoxName) => watch(checkBoxName,false)
   // console.log(isCheckBoxSelected('lawnMowing'))
-  const noServiceSelected = watch(ourServices.map(s => s.name), false)
-    .every(v => v===false)
-  // console.log(notSelectedService)
+  const noServiceSelected = !watch(ourServices.map(s => s.name)).includes(undefined)? watch(ourServices.map(s => s.name), false)
+    .every(v => v===false):true
+  console.log('noServiceSelected',noServiceSelected)
 
   // console.log('Form states',watch())
 
