@@ -9,7 +9,6 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
-import { Link as UILink } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -23,11 +22,9 @@ import { showMessage } from '../reducers/noticeReducer'
 const theme = createTheme()
 
 export default function Signup() {
-  const { currentUser } = useAuth()
+  const { currentUser,updateEmail,updatePassword } = useAuth()
 
   const { handleSubmit, register, formState: { errors }, setValue } = useForm()
-
-  // const [userInfo, setUserInfo] = useState(null)
 
   const history = useHistory()
   const dispatch = useDispatch()
@@ -52,17 +49,21 @@ export default function Signup() {
 
     try {
       console.log('edit profile form data',data)
-
+      await updateEmail(data.email)
+      await updatePassword(data.password)
+      // await updatePassword()
       await userService.update({
         firstName:data.firstName,
         lastName:data.lastName,
+        email:data.email,
         phone:data.phone,
         photoURL:data.photoURL
       })
       dispatch(showMessage({ type:'success',text:'profile updated!' },5))
       history.push('/')
     } catch (err) {
-      dispatch(showMessage({ type:'error',text:'Failed' },5))
+      dispatch(showMessage({ type:'error',text:'Failed, check console whats wrong...' },5))
+      console.log('edit profile',err)
     }
   }
 
@@ -81,7 +82,7 @@ export default function Signup() {
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1">
             Profile
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>

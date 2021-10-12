@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '../contexts/AuthContext'
-import { Link,useHistory } from 'react-router-dom'
+import { Link as RouterLink ,useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { showMessage } from '../reducers/noticeReducer'
 
@@ -15,10 +16,13 @@ import Checkbox from '@mui/material/Checkbox'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { Link as UILink } from '@mui/material'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { FormControlLabel } from '@mui/material'
+import { FormControlLabel,Link } from '@mui/material'
+import GoogleIcon from '@mui/icons-material/Google'
+
+// service
+import userService from '../services/user'
 
 const theme = createTheme()
 
@@ -28,7 +32,7 @@ export default function Login() {
 
   const { handleSubmit, register, formState: { errors } } = useForm()
 
-  const { login } = useAuth()
+  const { login,signInWithGoogleAccount } = useAuth()
 
   const history = useHistory()
 
@@ -44,6 +48,30 @@ export default function Login() {
     } catch (err) {
       dispatch(showMessage({ type:'error',text:'The password is invalid or the user does not have a password.' },5))
       // console.log(err)
+    }
+  }
+
+  const handleSignInWithGoogleAccount = async() => {
+    try {
+      const res = await signInWithGoogleAccount()
+      // console.log(res)
+      if(res.additionalUserInfo.isNewUser){
+        console.log('isNewUser')
+
+        const userInfo = res.additionalUserInfo.profile
+        await userService.create({
+          uid: res.user.uid,
+          email:userInfo.email,
+          firstName:userInfo.given_name,
+          lastName:userInfo.family_name,
+        })
+      }
+
+      dispatch(showMessage({ type:'success',text:'login good!' },5))
+      history.push('/')
+
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -65,6 +93,11 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Login
           </Typography>
+
+          <Button onClick={handleSignInWithGoogleAccount} variant="outlined" startIcon={<GoogleIcon />}>
+            Login with Google
+          </Button>
+
           <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
 
@@ -88,11 +121,11 @@ export default function Login() {
                   type="password"
                   id="password"
                 />
-                <Link to="/forgot-password">
-                  <UILink variant="caption">
+
+                <Link component={RouterLink} to="/forgot-password">
                   Forgot Password?
-                  </UILink>
                 </Link>
+
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
@@ -111,10 +144,8 @@ export default function Login() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link to="/signup">
-                  <UILink variant="body2">
-                  Need an account? Sign up
-                  </UILink>
+                <Link component={RouterLink} to="/signup">
+                Need an account? Sign up
                 </Link>
               </Grid>
             </Grid>

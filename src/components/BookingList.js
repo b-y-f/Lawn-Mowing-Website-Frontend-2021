@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react'
 
+// UI
 import { styled } from '@mui/material/styles'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
@@ -12,15 +13,18 @@ import Typography from '@mui/material/Typography'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Divider, List, ListItem, Rating, Stack } from '@mui/material'
 import Chip from '@mui/material/Chip'
-import moment from 'moment'
-import bookingService from '../services/booking'
 import CancelIcon from '@mui/icons-material/Cancel'
 import { red } from '@mui/material/colors'
+
+// functions
+import moment from 'moment'
+import bookingService from '../services/booking'
 import { useDispatch, useSelector } from 'react-redux'
 import { showMessage } from '../reducers/noticeReducer'
 import { removeBooking } from '../reducers/bookingReducer'
 import FilterAndSortBooking from './FilterAndSortBooking'
 import { sortAscByDate, sortDescByDate } from '../helpers/sortHelper'
+import { Box } from '@mui/system'
 
 
 const ExpandMore = styled((props) => {
@@ -150,6 +154,17 @@ export default function BookingList(){
     )
   }
 
+  const renderNoBookings = () => (
+    <>
+      <Box
+        component="img"
+        src="/not-found.svg"
+        sx={{ height: 230, width:2/3, mb:2 }}
+      />
+      <Typography sx={{ mb:2 }} variant="body2" >No booking added...</Typography>
+    </>
+  )
+
   return(
     <div>
       <FilterAndSortBooking
@@ -158,6 +173,8 @@ export default function BookingList(){
 
       <List>
         <h2>Booking List</h2>
+        {bookings.length===0 && renderNoBookings()}
+
         {bookings.map((booking,i) => (
           <ListItem key={i}>
             <Card sx={{ width:1 }}>

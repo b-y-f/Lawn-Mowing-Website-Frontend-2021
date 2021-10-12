@@ -25,7 +25,7 @@ export default function AdminLogin() {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className="">
-        <Typography component="h1" variant="h5">
+        <Typography component="h1">
           Sign in
         </Typography>
         <form

@@ -58,8 +58,8 @@ export default function AddBooking({ handleHideAddBookingButton }) {
     dispatch(createBooking(bookingData))
 
     dispatch(showMessage({ type:'success', text:'Create new booking OK!!' },5))
-    reset()
-    // resetSelections()
+
+    handleReset()
   }
 
   const { ref } = usePlacesWidget({
@@ -101,11 +101,11 @@ export default function AddBooking({ handleHideAddBookingButton }) {
   // console.log(isCheckBoxSelected('lawnMowing'))
   const noServiceSelected = !watch(ourServices.map(s => s.name)).includes(undefined)? watch(ourServices.map(s => s.name), false)
     .every(v => v===false):true
-  console.log('noServiceSelected',noServiceSelected)
+  // console.log('noServiceSelected',noServiceSelected)
 
   // console.log('Form states',watch())
 
-  const handleCancelButton = () => {
+  const handleReset = () => {
     reset()
     handleHideAddBookingButton()
   }
@@ -155,7 +155,7 @@ export default function AddBooking({ handleHideAddBookingButton }) {
 
             <Stack direction="row" spacing={2} justifyContent="center">
               <Button type='submit' variant="contained" color="success">Add</Button>
-              <Button variant="contained" color="error" onClick={handleCancelButton}>Cancel</Button>
+              <Button variant="contained" color="error" onClick={handleReset}>Cancel</Button>
             </Stack>
           </Stack>
         </form>
